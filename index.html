@@ -1,0 +1,433 @@
+PCFET0NUWVBFIGh0bWw+CiAgIC8qDQogICAgQ29weXJpZ2h0OiBodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnRlcm5hbC1jbGllbnQNCiAgIC8qPg0KPGh0bWwgbGFuZz0iemhDLiI+
+PGhlYWQ+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园打卡指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #F8FAFC;
+            color: #1F2937;
+            line-height: 1.6;
+        }
+
+        /* Hero区域 */
+        .hero {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(rgba(74, 144, 217, 0.7), rgba(74, 144, 217, 0.5)),
+                        url('https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box button {
+            padding: 14px 30px;
+            background-color: #FF6B6B;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-box button:hover {
+            background-color: #ee5253;
+        }
+
+        /* 分类导航 */
+        .category-nav {
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .category-container {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 0 20px;
+            scrollbar-width: none;
+        }
+
+        .category-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-tag {
+            flex-shrink: 0;
+            padding: 10px 24px;
+            background-color: #F8FAFC;
+            color: #6B7280;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .category-tag.active {
+            background-color: #4A90D9;
+            color: white;
+        }
+
+        .category-tag:hover {
+            background-color: #4A90D9;
+            color: white;
+        }
+
+        /* 热门推荐区域 */
+        .recommendations {
+            padding: 2rem 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .recommendations h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-left: 10px;
+            border-left: 4px solid #4A90D9;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .card {
+            width: 300px;
+            height: 380px;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-content {
+            padding: 1.2rem;
+        }
+
+        .card-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: rgba(74, 144, 217, 0.1);
+            color: #4A90D9;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1F2937;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #6B7280;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            height: 54px;
+            overflow: hidden;
+        }
+
+        .card-detail-btn {
+            display: none;
+            width: 100%;
+            padding: 10px;
+            background-color: #4A90D9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background-color 0.3s;
+        }
+
+        .card:hover .card-detail-btn {
+            display: block;
+        }
+
+        .card-detail-btn:hover {
+            background-color: #3d80c7;
+        }
+
+        /* 底部信息 */
+        footer {
+            background-color: #1F2937;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        /* 卡片隐藏样式 - 修复grid布局问题 */
+        .card.hidden {
+            visibility: hidden;
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cards-container {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 300px;
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero区域 -->
+    <section class="hero">
+        <h1>校园打卡指南</h1>
+        <p>探索校园美景，记录青春足迹</p>
+        <div class="search-box">
+            <input type="text" placeholder="搜索打卡地点...">
+            <button>搜索</button>
+        </div>
+    </section>
+
+    <!-- 分类导航 -->
+    <nav class="category-nav">
+        <div class="category-container">
+            <div class="category-tag active" data-category="all">全部</div>
+            <div class="category-tag" data-category="学习">学习</div>
+            <div class="category-tag" data-category="美食">美食</div>
+            <div class="category-tag" data-category="休闲">休闲</div>
+            <div class="category-tag" data-category="运动">运动</div>
+        </div>
+    </nav>
+
+    <!-- 热门推荐 -->
+    <section class="recommendations">
+        <h2>热门打卡点</h2>
+        <div class="cards-container">
+            <!-- 学习区 -->
+            <div class="card" data-category="学习">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=600&q=80')"></div>
+                <div class="card-content">
+                    <span class="card-category">学习区</span>
+                    <h3 class="card-title">图书馆自习室</h3>
+                    <p class="card-desc">安静舒适的学习环境，丰富的藏书资源，是备考复习的绝佳去处。</p>
+                    <button class="card-detail-btn">查看详情</button>
+                </div>
+            </div>
+
+            <div class="card" data-category="学习">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80')"></div>
+                <div class="card-content">
+                    <span class="card-category">学习区</span>
+                    <h3 class="card-title">阶梯教室</h3>
+                    <p class="card-desc">宽敞明亮的现代化教室，配备先进教学设备，适合小组讨论和自习。</p>
+                    <button class="card-detail-btn">查看详情</button>
+                </div>
+            </div>
+
+            <!-- 美食区 -->
+            <div class="card" data-category="美食">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80')"></div>
+                <div class="card-content">
+                    <span class="card-category">美食区</span>
+                    <h3 class="card-title">风味食堂二楼</h3>
+                    <p class="card-desc">汇聚各地特色美食，价格实惠，口味正宗，是吃货的天堂。</p>
+                    <button class="card-detail-btn">查看详情</button>
+                </div>
+            </div>
+
+            <div class="card" data-category="美食">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80')"></div>
+                <div class="card-content">
+                    <span class="card-category">美食区</span>
+                    <h3 class="card-title">校园咖啡角</h3>
+                    <p class="card-desc">温馨舒适的氛围，醇香的咖啡，是休闲小憩和小组讨论的好地方。</p>
+                    <button class="card-detail-btn">查看详情</button>
+                </div>
+            </div>
+
+            <!-- 休闲区 -->
+            <div class="card" data-category="休闲">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1525065079638-18b06268f014?w=600&q=80')"></div>
+                <div class="card-content">
+                    <span class="card-category">休闲区</span>
+                    <h3 class="card-title">樱花大道</h3>
+                    <p class="card-desc">春日樱花盛开，美不胜收，是校园里最浪漫的风景线。</p>
+                    <button class="card-detail-btn">查看详情</button>
+                </div>
+            </div>
+
+            <div class="card" data-category="休闲">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=600&q=80')"></div>
+                <div class="card-content">
+                    <span class="card-category">休闲区</span>
+                    <h3 class="card-title">湖心亭</h3>
+                    <p class="card-desc">位于校园中心湖畔，宁静雅致，是读书、冥想的理想场所。</p>
+                    <button class="card-detail-btn">查看详情</button>
+                </div>
+            </div>
+
+            <!-- 运动区 -->
+            <div class="card" data-category="运动">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80')"></div>
+                <div class="card-content">
+                    <span class="card-category">运动区</span>
+                    <h3 class="card-title">风雨操场</h3>
+                    <p class="card-desc">设施齐全的室内运动场馆，包含篮球、羽毛球、乒乓球等场地。</p>
+                    <button class="card-detail-btn">查看详情</button>
+                </div>
+            </div>
+
+            <div class="card" data-category="运动">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1445308394109-4ec2920981b1?w=600&q=80')"></div>
+                <div class="card-content">
+                    <span class="card-category">运动区</span>
+                    <h3 class="card-title">环山步道</h3>
+                    <p class="card-desc">环绕校园的环山步道，风景优美，是晨跑和散步的最佳选择。</p>
+                    <button class="card-detail-btn">查看详情</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部信息 -->
+    <footer>
+        <p>&copy; 2024 校园打卡指南 | 探索美好校园生活</p>
+    </footer>
+
+    <script>
+        // 分类切换功能
+        const categoryTags = document.querySelectorAll('.category-tag');
+        const cards = document.querySelectorAll('.card');
+
+        categoryTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                // 移除所有标签的active类
+                categoryTags.forEach(t => t.classList.remove('active'));
+                // 添加当前标签的active类
+                tag.classList.add('active');
+
+                const category = tag.dataset.category;
+
+                // 显示/隐藏卡片 - 使用hidden类修复grid布局问题
+                cards.forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // 搜索功能
+        const searchInput = document.querySelector('.search-box input');
+        const searchBtn = document.querySelector('.search-box button');
+
+        searchBtn.addEventListener('click', () => {
+            const keyword = searchInput.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const desc = card.querySelector('.card-desc').textContent.toLowerCase();
+                if (keyword === '' || title.includes(keyword) || desc.includes(keyword)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+
+        // 支持回车键搜索
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                searchBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
