@@ -6,7 +6,7 @@
     <title>校园打卡指南</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'PingFang SC','Microsoft YaHei',sans-serif; background-color: #F8FAFC; color: #1F2937; line-height: 1.6; }
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background-color: #F8FAFC; color: #1F2937; line-height: 1.6; }
         .hero { position: relative; height: 400px; background: linear-gradient(rgba(74,144,217,0.7),rgba(74,144,217,0.5)),url('https://aka.doubaocdn.com/s/AASm1wUke2'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
         .hero h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         .hero p { font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.95; }
@@ -156,105 +156,35 @@ var cardsData=[
 {id:8,title:'环山步道',desc:'环绕校园的环山步道，风景优美，是晨跑和散步的最佳选择。',category:'运动',image:'https://images.unsplash.com/photo-1445308394109-4ec2920981b1?w=600&q=80',detailDesc:'全长3.5公里的环山步道，柏油路面平整，坡度适中，沿途设有休息长椅和里程标识。步道穿越校园后山的小森林，空气清新，鸟语花香。沿途可俯瞰整个校园全景，是摄影爱好者的取景胜地。清晨6-8点是晨跑高峰，夜晚有柔和的路灯照明至23:00。全程步行约40分钟，跑步约20分钟，适合各年龄段锻炼。',initialLikes:51}
 ];
 var currentCategory='all',currentSort='likes',currentSearch='',currentModalCardId=null;
-function loadLikesData(){var s=localStorage.getItem('card_likes');if(s){try{return JSON.parse(s)}catch(e){return{}}}var o={};cardsData.forEach(function(c){o[c.id]=c.initialLikes});saveLikesData(o);return o}
-function saveLikesData(d){localStorage.setItem('card_likes',JSON.stringify(d))}
-function loadUserLikes(){var s=localStorage.getItem('card_user_likes');if(s){try{return JSON.parse(s)}catch(e){return[]}}return[]}
-function saveUserLikes(d){localStorage.setItem('card_user_likes',JSON.stringify(d))}
-function loadFavorites(){var s=localStorage.getItem('card_favorites');if(s){try{return JSON.parse(s)}catch(e){return[]}}return[]}
-function saveFavorites(d){localStorage.setItem('card_favorites',JSON.stringify(d))}
+function loadLikesData(){var a=localStorage.getItem('card_likes');if(a){try{return JSON.parse(a)}catch(b){return{}}}var c={};cardsData.forEach(function(d){c[d.id]=d.initialLikes});saveLikesData(c);return c}
+function saveLikesData(a){localStorage.setItem('card_likes',JSON.stringify(a))}
+function loadUserLikes(){var a=localStorage.getItem('card_user_likes');if(a){try{return JSON.parse(a)}catch(b){return[]}}return[]}
+function saveUserLikes(a){localStorage.setItem('card_user_likes',JSON.stringify(a))}
+function loadFavorites(){var a=localStorage.getItem('card_favorites');if(a){try{return JSON.parse(a)}catch(b){return[]}}return[]}
+function saveFavorites(a){localStorage.setItem('card_favorites',JSON.stringify(a))}
 var likesCountData=loadLikesData(),userLikes=loadUserLikes(),favorites=loadFavorites();
-
-function renderCards(arr){
-var ct=document.getElementById('cardsContainer');ct.innerHTML='';
-if(arr.length===0){ct.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#9CA3AF;padding:3rem 0;font-size:1.1rem;">没有找到匹配的打卡点，试试其他关键词吧~</p>';return}
-arr.forEach(function(c){
-var lk=likesCountData[c.id]||c.initialLikes,liked=userLikes.indexOf(c.id)!==-1,faved=favorites.indexOf(c.id)!==-1;
-var h='<div class="card" data-id="'+c.id+'" data-category="'+c.category+'">'+
-'<div class="card-image" style="background-image:url(\''+c.image+'\')"></div>'+
-'<div class="card-content">'+
-'<span class="card-category">'+c.category+'区</span>'+
-'<h3 class="card-title">'+c.title+'</h3>'+
-'<p class="card-desc">'+c.desc+'</p>'+
-'<div class="card-actions"><div class="action-group">'+
-'<button class="action-btn like-btn'+(liked?' liked':'')+'" data-action="like" data-id="'+c.id+'">'+
-'<span class="like-icon">'+(liked?'❤':'🤍')+'</span><span class="like-count">'+lk+'</span></button>'+
-'<button class="action-btn fav-btn'+(faved?' favorited':'')+'" data-action="fav" data-id="'+c.id+'">'+(faved?'⭐':'☆')+'</button>'+
-'</div><button class="card-detail-btn" data-action="detail" data-id="'+c.id+'">查看详情</button></div></div></div>';
-ct.insertAdjacentHTML('beforeend',h)});
-bindCardEvents();setupScrollAnimation()}
-
-function setupScrollAnimation(){
-var cards=document.querySelectorAll('.card:not(.card-visible)');if(cards.length===0)return;
-if('IntersectionObserver'in window){
-var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){
-if(e.isIntersecting){var c=e.target,i=Array.prototype.indexOf.call(cards,c),d=i*0.1+'s';
-c.style.transition='opacity 0.6s ease-out '+d+',transform 0.6s ease-out '+d;
-c.style.opacity='1';c.style.transform='translateY(0)';c.classList.add('card-visible');
-c.addEventListener('transitionend',function h(ev){if(ev.propertyName==='transform'){c.style.transition='';c.removeEventListener('transitionend',h)}});
-obs.unobserve(c)}})},{threshold:0.2,rootMargin:'0px 0px -50px 0px'});
-cards.forEach(function(c){obs.observe(c)})}else{cards.forEach(function(c){c.style.opacity='1';c.style.transform='translateY(0)';c.classList.add('card-visible')})}
-}
-
-function bindCardEvents(){var ct=document.getElementById('cardsContainer');ct.removeEventListener('click',cardClickHandler);ct.addEventListener('click',cardClickHandler)}
-function cardClickHandler(e){
-var btn=e.target.closest('[data-action]');if(btn){var a=btn.getAttribute('data-action'),id=parseInt(btn.getAttribute('data-id'),10);
-if(a==='like'){e.stopPropagation();toggleLike(id);return}if(a==='fav'){e.stopPropagation();toggleFavorite(id);return}
-if(a==='detail'){e.stopPropagation();openDetail(id);return}}
-var card=e.target.closest('.card');if(card)openDetail(parseInt(card.getAttribute('data-id'),10))}
-
-function getFilteredAndSortedData(){
-var r=cardsData.slice();if(currentCategory!=='all')r=r.filter(function(c){return c.category===currentCategory});
-if(currentSearch!==''){var kw=currentSearch;r=r.filter(function(c){return c.title.indexOf(kw)!==-1||c.desc.indexOf(kw)!==-1})}
-if(currentSort==='likes')r.sort(function(a,b){return(likesCountData[b.id]||b.initialLikes)-(likesCountData[a.id]||a.initialLikes)});
-else if(currentSort==='name')r.sort(function(a,b){return a.title.localeCompare(b.title,'zh-CN')});return r}
-function refreshCards(){renderCards(getFilteredAndSortedData())}
-
-function sortCards(m){currentSort=m;document.querySelectorAll('#sortBar .sort-btn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-sort')===m)});refreshCards()}
-
-function openDetail(id){
-var c=cardsData.find(function(x){return x.id===id});if(!c)return;currentModalCardId=id;
-var lk=likesCountData[id]||c.initialLikes,liked=userLikes.indexOf(id)!==-1,faved=favorites.indexOf(id)!==-1;
-document.getElementById('modalImage').style.backgroundImage='url(\''+c.image+'\')';
-document.getElementById('modalCategory').textContent=c.category+'区';
-document.getElementById('modalTitle').textContent=c.title;
-document.getElementById('modalDetailDesc').textContent=c.detailDesc;
-document.getElementById('modalActions').innerHTML=
-'<button class="action-btn like-btn'+(liked?' liked':'')+'" id="modalLikeBtn" data-action="like" data-id="'+id+'">'+(liked?'❤':'🤍')+' 点赞 '+lk+'</button>'+
-'<button class="action-btn fav-btn'+(faved?' favorited':'')+'" id="modalFavBtn" data-action="fav" data-id="'+id+'">'+(faved?'⭐':'☆')+' 收藏</button>';
-document.getElementById('modalLikeBtn').addEventListener('click',function(e){e.stopPropagation();toggleLike(id)});
-document.getElementById('modalFavBtn').addEventListener('click',function(e){e.stopPropagation();toggleFavorite(id)});
-var ov=document.getElementById('modalOverlay');ov.classList.remove('closing');ov.classList.add('visible');document.body.style.overflow='hidden'}
-
-function closeDetail(){var ov=document.getElementById('modalOverlay');ov.classList.remove('visible');ov.classList.add('closing');document.body.style.overflow='';setTimeout(function(){ov.classList.remove('closing')},260);currentModalCardId=null}
-
-function toggleLike(id){var idx=userLikes.indexOf(id),cnt=likesCountData[id]||(cardsData.find(function(c){return c.id===id})||{}).initialLikes||0;
-if(idx!==-1){userLikes.splice(idx,1);likesCountData[id]=Math.max(0,cnt-1)}else{userLikes.push(id);likesCountData[id]=cnt+1}
-saveLikesData(likesCountData);saveUserLikes(userLikes);refreshCards();if(currentModalCardId===id)openDetail(id)}
-
-function toggleFavorite(id){var idx=favorites.indexOf(id);if(idx!==-1)favorites.splice(idx,1);else favorites.push(id);saveFavorites(favorites);refreshCards();if(currentModalCardId===id)openDetail(id)}
-
-function debounce(fn,delay){var t=null;return function(){clearTimeout(t);t=setTimeout(fn.bind(this),delay)}}
-function performSearch(){currentSearch=document.getElementById('searchInput').value.toLowerCase().trim();refreshCards()}
+function renderCards(a){var b=document.getElementById('cardsContainer');b.innerHTML='';if(a.length===0){b.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#9CA3AF;padding:3rem 0;font-size:1.1rem;">没有找到匹配的打卡点，试试其他关键词吧~</p>';return}a.forEach(function(c){var d=likesCountData[c.id]||c.initialLikes,e=userLikes.indexOf(c.id)!==-1,f=favorites.indexOf(c.id)!==-1,g=c.category+'区';var h='<div class="card" data-id="'+c.id+'" data-category="'+c.category+'">'+'<div class="card-image" style="background-image:url(\''+c.image+'\')"></div>'+'<div class="card-content">'+'<span class="card-category">'+g+'</span>'+'<h3 class="card-title">'+c.title+'</h3>'+'<p class="card-desc">'+c.desc+'</p>'+'<div class="card-actions">'+'<div class="action-group">'+'<button class="action-btn like-btn'+(e?' liked':'')+'" data-action="like" data-id="'+c.id+'">'+'<span class="like-icon">'+(e?'❤':'🤍')+'</span>'+'<span class="like-count">'+d+'</span>'+'</button>'+'<button class="action-btn fav-btn'+(f?' favorited':'')+'" data-action="fav" data-id="'+c.id+'">'+(f?'⭐':'☆')+'</button>'+'</div>'+'<button class="card-detail-btn" data-action="detail" data-id="'+c.id+'">查看详情</button>'+'</div>'+'</div>'+'</div>';b.insertAdjacentHTML('beforeend',h)});bindCardEvents();setupScrollAnimation()}
+function setupScrollAnimation(){var a=document.querySelectorAll('.card:not(.card-visible)');if(a.length===0)return;if('IntersectionObserver'in window){var b=new IntersectionObserver(function(c){c.forEach(function(d){if(d.isIntersecting){var e=d.target,f=Array.prototype.indexOf.call(a,e),g=(f*0.1)+'s';e.style.transition='opacity 0.6s ease-out '+g+', transform 0.6s ease-out '+g;e.style.opacity='1';e.style.transform='translateY(0)';e.classList.add('card-visible');e.addEventListener('transitionend',function h(i){if(i.propertyName==='transform'){e.style.transition='';e.removeEventListener('transitionend',h)}});b.unobserve(e)}})},{threshold:0.2,rootMargin:'0px 0px -50px 0px'});a.forEach(function(c){b.observe(c)})}else{a.forEach(function(c){c.style.opacity='1';c.style.transform='translateY(0)';c.classList.add('card-visible')})}}
+function bindCardEvents(){var a=document.getElementById('cardsContainer');a.removeEventListener('click',cardClickHandler);a.addEventListener('click',cardClickHandler)}
+function cardClickHandler(a){var b=a.target.closest('[data-action]');if(b){var c=b.getAttribute('data-action'),d=parseInt(b.getAttribute('data-id'),10);if(c==='like'){a.stopPropagation();toggleLike(d);return}if(c==='fav'){a.stopPropagation();toggleFavorite(d);return}if(c==='detail'){a.stopPropagation();openDetail(d);return}}var e=a.target.closest('.card');if(e){var d=parseInt(e.getAttribute('data-id'),10);openDetail(d)}}
+function getFilteredAndSortedData(){var a=cardsData.slice();if(currentCategory!=='all'){a=a.filter(function(b){return b.category===currentCategory})}if(currentSearch!==''){var c=currentSearch;a=a.filter(function(b){return b.title.indexOf(c)!==-1||b.desc.indexOf(c)!==-1})}if(currentSort==='likes'){a.sort(function(b,d){var e=likesCountData[b.id]||b.initialLikes,f=likesCountData[d.id]||d.initialLikes;return f-e})}else if(currentSort==='name'){a.sort(function(b,d){return b.title.localeCompare(d.title,'zh-CN')})}return a}
+function refreshCards(){var a=getFilteredAndSortedData();renderCards(a)}
+function sortCards(a){currentSort=a;var b=document.querySelectorAll('#sortBar .sort-btn');b.forEach(function(c){if(c.getAttribute('data-sort')===a){c.classList.add('active')}else{c.classList.remove('active')}});refreshCards()}
+function openDetail(a){var b=cardsData.find(function(c){return c.id===a});if(!b)return;currentModalCardId=a;var d=likesCountData[a]||b.initialLikes,e=userLikes.indexOf(a)!==-1,f=favorites.indexOf(a)!==-1;document.getElementById('modalImage').style.backgroundImage='url(\''+b.image+'\')';document.getElementById('modalCategory').textContent=b.category+'区';document.getElementById('modalTitle').textContent=b.title;document.getElementById('modalDetailDesc').textContent=b.detailDesc;var g=document.getElementById('modalActions');g.innerHTML='<button class="action-btn like-btn'+(e?' liked':'')+'" id="modalLikeBtn" data-action="like" data-id="'+a+'">'+(e?'❤':'🤍')+' 点赞 '+d+'</button>'+'<button class="action-btn fav-btn'+(f?' favorited':'')+'" id="modalFavBtn" data-action="fav" data-id="'+a+'">'+(f?'⭐':'☆')+' 收藏</button>';document.getElementById('modalLikeBtn').addEventListener('click',function(h){h.stopPropagation();toggleLike(a)});document.getElementById('modalFavBtn').addEventListener('click',function(h){h.stopPropagation();toggleFavorite(a)});var i=document.getElementById('modalOverlay');i.classList.remove('closing');i.classList.add('visible');document.body.style.overflow='hidden'}
+function closeDetail(){var a=document.getElementById('modalOverlay');a.classList.remove('visible');a.classList.add('closing');document.body.style.overflow='';setTimeout(function(){a.classList.remove('closing')},260);currentModalCardId=null}
+function toggleLike(a){var b=userLikes.indexOf(a),c=likesCountData[a]||(cardsData.find(function(d){return d.id===a})||{}).initialLikes||0;if(b!==-1){userLikes.splice(b,1);likesCountData[a]=Math.max(0,c-1)}else{userLikes.push(a);likesCountData[a]=c+1}saveLikesData(likesCountData);saveUserLikes(userLikes);refreshCards();if(currentModalCardId===a){openDetail(a)}}
+function toggleFavorite(a){var b=favorites.indexOf(a);if(b!==-1){favorites.splice(b,1)}else{favorites.push(a)}saveFavorites(favorites);refreshCards();if(currentModalCardId===a){openDetail(a)}}
+function debounce(a,b){var c=null;return function(){var d=this,e=arguments;clearTimeout(c);c=setTimeout(function(){a.apply(d,e)},b)}}
+function performSearch(){var a=document.getElementById('searchInput');currentSearch=a.value.toLowerCase().trim();refreshCards()}
 var debouncedSearch=debounce(performSearch,300);
-
-function filterByCategory(cat){currentCategory=cat;document.querySelectorAll('#categoryContainer .category-tag').forEach(function(t){t.classList.toggle('active',t.getAttribute('data-category')===cat)});refreshCards()}
-
-var FALLBACK_QUOTES=[{text:'天行健，君子以自强不息。',source:'《周易》'},{text:'千里之行，始于足下。',source:'老子《道德经》'},{text:'学而不思则罔，思而不学则殆。',source:'孔子《论语》'},{text:'路漫漫其修远兮，吾将上下而求索。',source:'屈原《离骚》'},{text:'宝剑锋从磨砺出，梅花香自苦寒来。',source:'《警世贤文》'}],quoteAbortController=null,quoteFetching=false;
+function filterByCategory(a){currentCategory=a;var b=document.querySelectorAll('#categoryContainer .category-tag');b.forEach(function(c){if(c.getAttribute('data-category')===a){c.classList.add('active')}else{c.classList.remove('active')}});refreshCards()}
+var FALLBACK_QUOTES=[{text:'天行健，君子以自强不息。',source:'《周易》'},{text:'千里之行，始于足下。',source:'老子《道德经》'},{text:'学而不思则罔，思而不学则殆。',source:'孔子《论语》'},{text:'路漫漫其修远兮，吾将上下而求索。',source:'屈原《离骚》'},{text:'宝剑锋从磨砺出，梅花香自苦寒来。',source:'《警世贤文》'}];
+var quoteAbortController=null,quoteFetching=false;
 function showQuoteLoading(){document.getElementById('quoteLoading').style.display='flex';document.getElementById('quoteContent').style.display='none'}
-function showQuoteContent(t,s){document.getElementById('quoteLoading').style.display='none';document.getElementById('quoteContent').style.display='block';document.getElementById('quoteText').textContent=t;document.getElementById('quoteSource').textContent='—— '+s}
-function showFallbackQuote(){var f=FALLBACK_QUOTES[Math.floor(Math.random()*FALLBACK_QUOTES.length)];showQuoteContent(f.text,f.source)}
-function fetchHitokoto(){if(quoteAbortController)quoteAbortController.abort();quoteFetching=true;showQuoteLoading();quoteAbortController=new AbortController();var s=quoteAbortController.signal,t=setTimeout(function(){quoteAbortController.abort()},5000);fetch('https://v1.hitokoto.cn/',{signal:s}).then(function(r){clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){showQuoteContent(d.hitokoto,d.from);quoteFetching=false;quoteAbortController=null}).catch(function(){clearTimeout(t);showFallbackQuote();quoteFetching=false;quoteAbortController=null})}
-
-function init(){
-document.querySelectorAll('#categoryContainer .category-tag').forEach(function(t){t.addEventListener('click',function(){filterByCategory(this.getAttribute('data-category'))})});
-document.querySelectorAll('#sortBar .sort-btn').forEach(function(b){b.addEventListener('click',function(){sortCards(this.getAttribute('data-sort'))})});
-var si=document.getElementById('searchInput');si.addEventListener('input',debouncedSearch);
-document.getElementById('searchBtn').addEventListener('click',performSearch);si.addEventListener('keyup',function(e){if(e.key==='Enter')performSearch()});
-document.getElementById('modalClose').addEventListener('click',closeDetail);
-document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeDetail()});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&currentModalCardId!==null)closeDetail()});
-document.getElementById('dailyQuote').addEventListener('click',fetchHitokoto);
-refreshCards();fetchHitokoto()}
+function showQuoteContent(a,b){document.getElementById('quoteLoading').style.display='none';document.getElementById('quoteContent').style.display='block';document.getElementById('quoteText').textContent=a;document.getElementById('quoteSource').textContent='—— '+b}
+function showFallbackQuote(){var a=Math.floor(Math.random()*FALLBACK_QUOTES.length),b=FALLBACK_QUOTES[a];showQuoteContent(b.text,b.source)}
+function fetchHitokoto(){if(quoteAbortController){quoteAbortController.abort()}quoteFetching=true;showQuoteLoading();quoteAbortController=new AbortController();var a=quoteAbortController.signal,b=setTimeout(function(){quoteAbortController.abort()},5000);fetch('https://v1.hitokoto.cn/',{signal:a}).then(function(c){clearTimeout(b);if(!c.ok){throw new Error('HTTP '+c.status)}return c.json()}).then(function(c){showQuoteContent(c.hitokoto,c.from);quoteFetching=false;quoteAbortController=null}).catch(function(c){clearTimeout(b);showFallbackQuote();quoteFetching=false;quoteAbortController=null})}
+function init(){var a=document.querySelectorAll('#categoryContainer .category-tag');a.forEach(function(b){b.addEventListener('click',function(){var c=this.getAttribute('data-category');filterByCategory(c)})});var d=document.querySelectorAll('#sortBar .sort-btn');d.forEach(function(b){b.addEventListener('click',function(){var c=this.getAttribute('data-sort');sortCards(c)})});var e=document.getElementById('searchInput');e.addEventListener('input',debouncedSearch);document.getElementById('searchBtn').addEventListener('click',function(){performSearch()});e.addEventListener('keyup',function(b){if(b.key==='Enter'){performSearch()}});document.getElementById('modalClose').addEventListener('click',closeDetail);document.getElementById('modalOverlay').addEventListener('click',function(b){if(b.target===this){closeDetail()}});document.addEventListener('keydown',function(b){if(b.key==='Escape'&&currentModalCardId!==null){closeDetail()}});document.getElementById('dailyQuote').addEventListener('click',function(){fetchHitokoto()});refreshCards();fetchHitokoto()}
 document.addEventListener('DOMContentLoaded',init);
     </script>
 </body>
