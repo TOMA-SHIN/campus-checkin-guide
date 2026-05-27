@@ -1,15 +1,16 @@
-PCFET0NUWVBFIGh0bWw+CiAgIC8qDQogICAgQ29weXJpZ2h0OiBodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnRlcm5hbC1jbGllbnQNCiAgIC8qPg0KPGh0bWwgbGFuZz0iemhDLiI+
-PGhlYWQ+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>校园打卡指南</title>
     <style>
+        /* ========== 全局重置与基础样式 ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background-color: #F8FAFC;
@@ -17,12 +18,12 @@ PGhlYWQ+
             line-height: 1.6;
         }
 
-        /* Hero区域 */
+        /* ========== Hero区域 ========== */
         .hero {
             position: relative;
             height: 400px;
             background: linear-gradient(rgba(74, 144, 217, 0.7), rgba(74, 144, 217, 0.5)),
-                        url('https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=1920&q=80');
+                        url('https://aka.doubaocdn.com/s/AASm1wUke2');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -32,27 +33,23 @@ PGhlYWQ+
             color: white;
             text-align: center;
         }
-
         .hero h1 {
             font-size: 2.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-
         .hero p {
             font-size: 1.1rem;
             margin-bottom: 2rem;
             opacity: 0.95;
         }
-
         .search-box {
             display: flex;
             gap: 10px;
             width: 90%;
             max-width: 500px;
         }
-
         .search-box input {
             flex: 1;
             padding: 14px 20px;
@@ -62,7 +59,6 @@ PGhlYWQ+
             outline: none;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
         .search-box button {
             padding: 14px 30px;
             background-color: #FF6B6B;
@@ -73,12 +69,84 @@ PGhlYWQ+
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
         .search-box button:hover {
             background-color: #ee5253;
         }
 
-        /* 分类导航 */
+        /* ========== 每日一言展示区 ========== */
+        .daily-quote {
+            margin-top: 24px;
+            max-width: 500px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 16px 24px;
+            cursor: pointer;
+            transition: background 0.3s;
+            position: relative;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+        .daily-quote:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        .quote-loading {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0;
+        }
+        .quote-loading::before {
+            content: '';
+            display: block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .quote-content {
+            width: 100%;
+            text-align: center;
+        }
+        .quote-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            font-style: italic;
+            color: #fff;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .quote-source {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            text-align: right;
+            color: #fff;
+        }
+        .quote-refresh {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 8px;
+            color: #fff;
+            transition: opacity 0.3s;
+        }
+        .daily-quote:hover .quote-refresh {
+            opacity: 0.8;
+        }
+
+        /* ========== 分类导航 ========== */
         .category-nav {
             background-color: white;
             padding: 1rem 0;
@@ -87,7 +155,6 @@ PGhlYWQ+
             top: 0;
             z-index: 100;
         }
-
         .category-container {
             display: flex;
             gap: 15px;
@@ -95,11 +162,9 @@ PGhlYWQ+
             padding: 0 20px;
             scrollbar-width: none;
         }
-
         .category-container::-webkit-scrollbar {
             display: none;
         }
-
         .category-tag {
             flex-shrink: 0;
             padding: 10px 24px;
@@ -109,32 +174,56 @@ PGhlYWQ+
             cursor: pointer;
             transition: all 0.3s;
             font-size: 0.95rem;
+            user-select: none;
         }
-
         .category-tag.active {
             background-color: #4A90D9;
             color: white;
         }
-
         .category-tag:hover {
             background-color: #4A90D9;
             color: white;
         }
 
-        /* 热门推荐区域 */
-        .recommendations {
-            padding: 2rem 1rem;
+        /* ========== 排序栏 ========== */
+        .sort-bar {
+            display: flex;
+            gap: 10px;
+            padding: 0 1rem 1rem 1rem;
             max-width: 1400px;
             margin: 0 auto;
         }
+        .sort-btn {
+            padding: 8px 20px;
+            background-color: #F3F4F6;
+            color: #6B7280;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        .sort-btn:hover {
+            background-color: #E5E7EB;
+        }
+        .sort-btn.active {
+            background-color: #4A90D9;
+            color: white;
+        }
 
+        /* ========== 热门推荐区域 ========== */
+        .recommendations {
+            padding: 1rem 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
         .recommendations h2 {
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
             padding-left: 10px;
             border-left: 4px solid #4A90D9;
         }
-
         .cards-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -142,34 +231,61 @@ PGhlYWQ+
             justify-items: center;
         }
 
+        /* ========== 卡片样式 ========== */
         .card {
             width: 300px;
-            height: 380px;
+            height: 420px;
             background-color: white;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
         }
-
         .card:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
-
         .card-image {
             width: 100%;
             height: 200px;
             background-size: cover;
             background-position: center;
+            flex-shrink: 0;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
+        .card:hover .card-image {
+            transform: scale(1.08);
+        }
+        .card-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.05) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        .card:hover .card-image::after {
+            opacity: 1;
+        }
         .card-content {
             padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
-
         .card-category {
             display: inline-block;
             padding: 4px 12px;
@@ -178,46 +294,213 @@ PGhlYWQ+
             border-radius: 10px;
             font-size: 0.8rem;
             margin-bottom: 0.8rem;
+            width: fit-content;
         }
-
         .card-title {
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
             color: #1F2937;
         }
-
         .card-desc {
             font-size: 0.9rem;
             color: #6B7280;
             line-height: 1.5;
-            margin-bottom: 1rem;
-            height: 54px;
+            margin-bottom: 0.6rem;
+            flex: 1;
             overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
-
+        .card-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 0.5rem;
+            border-top: 1px solid #F3F4F6;
+            margin-top: auto;
+        }
+        .card-actions .action-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #9CA3AF;
+            transition: color 0.2s, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 4px 6px;
+            border-radius: 6px;
+        }
+        .action-btn:hover {
+            transform: scale(1.1);
+            background-color: #F9FAFB;
+        }
+        .action-btn.like-btn.liked {
+            color: #EF4444;
+        }
+        .action-btn.fav-btn.favorited {
+            color: #F59E0B;
+        }
+        .action-btn .like-count {
+            font-size: 0.8rem;
+            color: #6B7280;
+        }
         .card-detail-btn {
-            display: none;
-            width: 100%;
-            padding: 10px;
+            padding: 6px 14px;
             background-color: #4A90D9;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.95rem;
-            transition: background-color 0.3s;
+            font-size: 0.85rem;
+            transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
         }
-
-        .card:hover .card-detail-btn {
-            display: block;
-        }
-
         .card-detail-btn:hover {
             background-color: #3d80c7;
         }
 
-        /* 底部信息 */
+        /* ========== 详情弹出面板 ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        visibility 0s 0.3s;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        visibility 0s 0s;
+        }
+        .modal-overlay.closing {
+            opacity: 0;
+            visibility: visible;
+            transition: opacity 0.25s ease-in,
+                        visibility 0s 0.25s;
+        }
+        .modal-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            z-index: 1001;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-overlay.visible .modal-panel {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .modal-overlay.closing .modal-panel {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+            transition: opacity 0.25s ease-in,
+                        transform 0.25s ease-in;
+        }
+        .modal-panel .modal-image {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px 12px 0 0;
+        }
+        .modal-panel .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+        }
+        .modal-panel .modal-close:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .modal-panel .modal-body {
+            padding: 1.5rem;
+        }
+        .modal-panel .modal-category {
+            display: inline-block;
+            padding: 4px 14px;
+            background-color: rgba(74, 144, 217, 0.1);
+            color: #4A90D9;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+        .modal-panel .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1F2937;
+        }
+        .modal-panel .modal-detail-desc {
+            font-size: 0.95rem;
+            color: #4B5563;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        .modal-panel .modal-actions {
+            display: flex;
+            gap: 16px;
+            padding-top: 1rem;
+            border-top: 1px solid #F3F4F6;
+        }
+        .modal-panel .modal-actions .action-btn {
+            font-size: 1rem;
+            padding: 8px 16px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            background-color: #F9FAFB;
+        }
+        .modal-panel .modal-actions .action-btn.liked {
+            color: #EF4444;
+            border-color: #FECACA;
+            background-color: #FEF2F2;
+        }
+        .modal-panel .modal-actions .action-btn.favorited {
+            color: #F59E0B;
+            border-color: #FDE68A;
+            background-color: #FFFBEB;
+        }
+
+        /* ========== 底部信息 ========== */
         footer {
             background-color: #1F2937;
             color: rgba(255, 255, 255, 0.8);
@@ -225,58 +508,149 @@ PGhlYWQ+
             padding: 2rem;
             margin-top: 2rem;
         }
-
         footer p {
             font-size: 0.9rem;
         }
 
-        /* 卡片隐藏样式 - 修复grid布局问题 */
-        .card.hidden {
-            visibility: hidden;
-            opacity: 0;
-            height: 0;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        /* 响应式适配 */
+        /* ========== 响应式适配 - 平板端 <=768px ========== */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 1.8rem;
             }
-
             .hero p {
                 font-size: 1rem;
             }
-
             .cards-container {
                 grid-template-columns: 1fr;
                 padding: 0 10px;
             }
-
             .card {
                 width: 100%;
-                max-width: 300px;
-                height: 380px;
+                max-width: 340px;
+                height: 420px;
+            }
+            .modal-overlay {
+                align-items: flex-end;
+            }
+            .modal-panel {
+                width: 100%;
+                max-width: 100%;
+                height: 90vh;
+                max-height: 90vh;
+                border-radius: 16px 16px 0 0;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                transform: translateY(100%);
+                opacity: 1;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .modal-overlay.visible .modal-panel {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            .modal-overlay.closing .modal-panel {
+                transform: translateY(100%);
+                transition: transform 0.25s ease-in;
+            }
+            .modal-panel .modal-image {
+                border-radius: 16px 16px 0 0;
+                height: 220px;
+            }
+        }
+
+        /* ========== 响应式适配 - 手机端 <=480px ========== */
+        @media (max-width: 480px) {
+            .hero {
+                height: 320px;
+            }
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            .hero p {
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+            .search-box {
+                flex-direction: column;
+                align-items: center;
+            }
+            .search-box input {
+                width: 100%;
+            }
+            .search-box button {
+                width: 100%;
+            }
+            .daily-quote {
+                padding: 12px 16px;
+                margin-top: 18px;
+            }
+            .quote-text {
+                font-size: 0.9rem;
+            }
+            .quote-source {
+                font-size: 0.75rem;
+            }
+            .sort-bar {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .sort-btn {
+                width: 100%;
+                text-align: center;
+            }
+            .category-tag {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+            .card {
+                max-width: 100%;
+                height: auto;
+                min-height: 380px;
+            }
+            .card-image {
+                height: 180px;
+            }
+            .modal-panel {
+                height: 92vh;
+                max-height: 92vh;
+            }
+            .modal-panel .modal-image {
+                height: 180px;
+            }
+            .modal-panel .modal-title {
+                font-size: 1.25rem;
+            }
+            .modal-panel .modal-detail-desc {
+                font-size: 0.9rem;
+            }
+            .modal-panel .modal-actions {
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Hero区域 -->
     <section class="hero">
         <h1>校园打卡指南</h1>
         <p>探索校园美景，记录青春足迹</p>
         <div class="search-box">
-            <input type="text" placeholder="搜索打卡地点...">
-            <button>搜索</button>
+            <input type="text" id="searchInput" placeholder="搜索打卡地点...">
+            <button id="searchBtn">搜索</button>
+        </div>
+        <div class="daily-quote" id="dailyQuote" title="点击刷新">
+            <div class="quote-loading" id="quoteLoading"></div>
+            <div class="quote-content" id="quoteContent" style="display:none;">
+                <p class="quote-text" id="quoteText"></p>
+                <p class="quote-source" id="quoteSource"></p>
+            </div>
+            <div class="quote-refresh" id="quoteRefresh">点击刷新</div>
         </div>
     </section>
 
-    <!-- 分类导航 -->
     <nav class="category-nav">
-        <div class="category-container">
+        <div class="category-container" id="categoryContainer">
             <div class="category-tag active" data-category="all">全部</div>
             <div class="category-tag" data-category="学习">学习</div>
             <div class="category-tag" data-category="美食">美食</div>
@@ -285,149 +659,80 @@ PGhlYWQ+
         </div>
     </nav>
 
-    <!-- 热门推荐 -->
+    <div class="sort-bar" id="sortBar">
+        <button class="sort-btn active" data-sort="likes">&#x1f525; 热度排序</button>
+        <button class="sort-btn" data-sort="name">&#x1f4cb; 名称排序</button>
+    </div>
+
     <section class="recommendations">
         <h2>热门打卡点</h2>
-        <div class="cards-container">
-            <!-- 学习区 -->
-            <div class="card" data-category="学习">
-                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=600&q=80')"></div>
-                <div class="card-content">
-                    <span class="card-category">学习区</span>
-                    <h3 class="card-title">图书馆自习室</h3>
-                    <p class="card-desc">安静舒适的学习环境，丰富的藏书资源，是备考复习的绝佳去处。</p>
-                    <button class="card-detail-btn">查看详情</button>
-                </div>
-            </div>
-
-            <div class="card" data-category="学习">
-                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80')"></div>
-                <div class="card-content">
-                    <span class="card-category">学习区</span>
-                    <h3 class="card-title">阶梯教室</h3>
-                    <p class="card-desc">宽敞明亮的现代化教室，配备先进教学设备，适合小组讨论和自习。</p>
-                    <button class="card-detail-btn">查看详情</button>
-                </div>
-            </div>
-
-            <!-- 美食区 -->
-            <div class="card" data-category="美食">
-                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80')"></div>
-                <div class="card-content">
-                    <span class="card-category">美食区</span>
-                    <h3 class="card-title">风味食堂二楼</h3>
-                    <p class="card-desc">汇聚各地特色美食，价格实惠，口味正宗，是吃货的天堂。</p>
-                    <button class="card-detail-btn">查看详情</button>
-                </div>
-            </div>
-
-            <div class="card" data-category="美食">
-                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80')"></div>
-                <div class="card-content">
-                    <span class="card-category">美食区</span>
-                    <h3 class="card-title">校园咖啡角</h3>
-                    <p class="card-desc">温馨舒适的氛围，醇香的咖啡，是休闲小憩和小组讨论的好地方。</p>
-                    <button class="card-detail-btn">查看详情</button>
-                </div>
-            </div>
-
-            <!-- 休闲区 -->
-            <div class="card" data-category="休闲">
-                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1525065079638-18b06268f014?w=600&q=80')"></div>
-                <div class="card-content">
-                    <span class="card-category">休闲区</span>
-                    <h3 class="card-title">樱花大道</h3>
-                    <p class="card-desc">春日樱花盛开，美不胜收，是校园里最浪漫的风景线。</p>
-                    <button class="card-detail-btn">查看详情</button>
-                </div>
-            </div>
-
-            <div class="card" data-category="休闲">
-                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=600&q=80')"></div>
-                <div class="card-content">
-                    <span class="card-category">休闲区</span>
-                    <h3 class="card-title">湖心亭</h3>
-                    <p class="card-desc">位于校园中心湖畔，宁静雅致，是读书、冥想的理想场所。</p>
-                    <button class="card-detail-btn">查看详情</button>
-                </div>
-            </div>
-
-            <!-- 运动区 -->
-            <div class="card" data-category="运动">
-                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80')"></div>
-                <div class="card-content">
-                    <span class="card-category">运动区</span>
-                    <h3 class="card-title">风雨操场</h3>
-                    <p class="card-desc">设施齐全的室内运动场馆，包含篮球、羽毛球、乒乓球等场地。</p>
-                    <button class="card-detail-btn">查看详情</button>
-                </div>
-            </div>
-
-            <div class="card" data-category="运动">
-                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1445308394109-4ec2920981b1?w=600&q=80')"></div>
-                <div class="card-content">
-                    <span class="card-category">运动区</span>
-                    <h3 class="card-title">环山步道</h3>
-                    <p class="card-desc">环绕校园的环山步道，风景优美，是晨跑和散步的最佳选择。</p>
-                    <button class="card-detail-btn">查看详情</button>
-                </div>
-            </div>
-        </div>
+        <div class="cards-container" id="cardsContainer"></div>
     </section>
 
-    <!-- 底部信息 -->
     <footer>
         <p>&copy; 2024 校园打卡指南 | 探索美好校园生活</p>
     </footer>
 
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-panel" id="modalPanel">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-image" id="modalImage"></div>
+            <div class="modal-body">
+                <span class="modal-category" id="modalCategory"></span>
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <p class="modal-detail-desc" id="modalDetailDesc"></p>
+                <div class="modal-actions" id="modalActions"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 分类切换功能
-        const categoryTags = document.querySelectorAll('.category-tag');
-        const cards = document.querySelectorAll('.card');
+        var cardsData = [{id:1,title:'图书馆自习室',desc:'安静舒适的学习环境，丰富的藏书资源，是备考复习的绝佳去处。',category:'学习',image:'https://aka.doubaocdn.com/s/nEY51wUke6',detailDesc:'校园图书馆自习室拥有超过2000个座位，配备独立学习舱和小组讨论室。馆内藏书超过50万册，涵盖各学科领域。24小时开放区满足深夜学习需求，免费Wi-Fi覆盖全馆，是学霸们最爱的打卡圣地。每年期末季座无虚席，建议早8点前到馆占座。',initialLikes:42},{id:2,title:'阶梯教室',desc:'宽敞明亮的现代化教室，配备先进教学设备，适合小组讨论和自习。',category:'学习',image:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&q=80',detailDesc:'阶梯教室可容纳300人同时上课，配备4K投影仪和智能黑板系统。教室采用弧形阶梯设计，保证每个座位都有良好视野。课后开放为自习空间，空调、充电插座一应俱全，是小组项目讨论的热门地点。位于教学楼A区3层，周一至周五18:00-22:00开放自习。',initialLikes:28},{id:3,title:'风味食堂二楼',desc:'汇聚各地特色美食，价格实惠，口味正宗，是吃货的天堂。',category:'美食',image:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80',detailDesc:'风味食堂二楼汇集了来自全国各地的特色美食窗口，从四川麻辣烫到广东煲仔饭，从兰州拉面到东北饺子，应有尽有。人均消费仅15-25元，支持校园卡和移动支付。推荐必试：二楼的招牌黄焖鸡米饭（18元）和手工酸辣粉（12元），每到饭点大排长龙，建议错峰就餐。营业时间：10:30-13:30，16:30-19:30。',initialLikes:56},{id:4,title:'校园咖啡角',desc:'温馨舒适的氛围，醇香的咖啡，是休闲小憩和小组讨论的好地方。',category:'美食',image:'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80',detailDesc:'位于学生活动中心一楼的校园咖啡角，由学生创业团队运营。提供现磨咖啡、手工奶茶和精致甜点，价格亲民（美式15元、拿铁18元）。店内设有舒适的沙发区和高脚桌工作区，定期举办小型音乐会和读书分享会，是校园文艺青年的聚集地。免费Wi-Fi，支持手机充电，营业时间：9:00-22:00。',initialLikes:35},{id:5,title:'樱花大道',desc:'春日樱花盛开，美不胜收，是校园里最浪漫的风景线。',category:'休闲',image:'https://aka.doubaocdn.com/s/hPzo1wUkeA',detailDesc:'每年3月下旬至4月上旬，长约500米的樱花大道两侧近百株樱花同时绽放，形成粉白色的花廊。学校每年举办樱花文化节，有汉服游园、摄影比赛等活动，吸引众多市民前来观赏。最佳观赏时间是清晨7-8点和黄昏5-6点，光线柔和，拍照效果最佳。位于校园南门至图书馆之间，步行约15分钟。',initialLikes:89},{id:6,title:'湖心亭',desc:'位于校园中心湖畔，宁静雅致，是读书、冥想的理想场所。',category:'休闲',image:'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=600&q=80',detailDesc:'湖心亭建于上世纪80年代，是校园的标志性建筑之一。通过九曲桥与岸边相连，亭内设有石桌石凳。湖中养有锦鲤和天鹅，周围垂柳依依，景色四季各异。清晨常有学生在此晨读，傍晚则是情侣约会和好友聊天的浪漫之地。湖心亭夜间有景观灯照明，是拍摄校园夜景的最佳取景点。',initialLikes:47},{id:7,title:'风雨操场',desc:'设施齐全的室内运动场馆，包含篮球、羽毛球、乒乓球等场地。',category:'运动',image:'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80',detailDesc:'风雨操场总面积达8000平方米，包含4个标准篮球场、12个羽毛球场和16张乒乓球桌。配备专业运动地板和LED照明系统，更衣室和淋浴间设施完善。凭学生证免费入场，周末和晚间时段人较多，建议错峰前往。周一至周五开放时间：6:00-22:00，周末：8:00-21:00。篮球场晚间需提前预约。',initialLikes:38},{id:8,title:'环山步道',desc:'环绕校园的环山步道，风景优美，是晨跑和散步的最佳选择。',category:'运动',image:'https://images.unsplash.com/photo-1445308394109-4ec2920981b1?w=600&q=80',detailDesc:'全长3.5公里的环山步道，柏油路面平整，坡度适中，沿途设有休息长椅和里程标识。步道穿越校园后山的小森林，空气清新，鸟语花香。沿途可俯瞰整个校园全景，是摄影爱好者的取景胜地。清晨6-8点是晨跑高峰，夜晚有柔和的路灯照明至23:00。全程步行约40分钟，跑步约20分钟，适合各年龄段锻炼。',initialLikes:51}];
 
-        categoryTags.forEach(tag => {
-            tag.addEventListener('click', () => {
-                // 移除所有标签的active类
-                categoryTags.forEach(t => t.classList.remove('active'));
-                // 添加当前标签的active类
-                tag.classList.add('active');
+        var currentCategory='all',currentSort='likes',currentSearch='',currentModalCardId=null;
 
-                const category = tag.dataset.category;
+        function loadLikesData(){var e=localStorage.getItem('card_likes');if(e){try{return JSON.parse(e)}catch(e){return{}}}var t={};cardsData.forEach(function(e){t[e.id]=e.initialLikes});saveLikesData(t);return t}
+        function saveLikesData(e){localStorage.setItem('card_likes',JSON.stringify(e))}
+        function loadUserLikes(){var e=localStorage.getItem('card_user_likes');if(e){try{return JSON.parse(e)}catch(e){return[]}}return[]}
+        function saveUserLikes(e){localStorage.setItem('card_user_likes',JSON.stringify(e))}
+        function loadFavorites(){var e=localStorage.getItem('card_favorites');if(e){try{return JSON.parse(e)}catch(e){return[]}}return[]}
+        function saveFavorites(e){localStorage.setItem('card_favorites',JSON.stringify(e))}
 
-                // 显示/隐藏卡片 - 使用hidden类修复grid布局问题
-                cards.forEach(card => {
-                    if (category === 'all' || card.dataset.category === category) {
-                        card.classList.remove('hidden');
-                    } else {
-                        card.classList.add('hidden');
-                    }
-                });
-            });
-        });
+        var likesCountData=loadLikesData(),userLikes=loadUserLikes(),favorites=loadFavorites();
 
-        // 搜索功能
-        const searchInput = document.querySelector('.search-box input');
-        const searchBtn = document.querySelector('.search-box button');
+        function renderCards(e){var t=document.getElementById('cardsContainer');t.innerHTML='';if(e.length===0){t.innerHTML='<p style="grid-column:1/-1;text-align:center;color:#9CA3AF;padding:3rem 0;font-size:1.1rem;">没有找到匹配的打卡点，试试其他关键词吧~</p>';return}e.forEach(function(e){var n=likesCountData[e.id]||e.initialLikes,i=userLikes.indexOf(e.id)!==-1,o=favorites.indexOf(e.id)!==-1,r=e.category+'区',a='<div class="card" data-id="'+e.id+'" data-category="'+e.category+'"><div class="card-image" style="background-image:url(\''+e.image+'\')"></div><div class="card-content"><span class="card-category">'+r+'</span><h3 class="card-title">'+e.title+'</h3><p class="card-desc">'+e.desc+'</p><div class="card-actions"><div class="action-group"><button class="action-btn like-btn'+(i?' liked':'')+'" data-action="like" data-id="'+e.id+'"><span class="like-icon">'+(i?'❤':'🤍')+'</span><span class="like-count">'+n+'</span></button><button class="action-btn fav-btn'+(o?' favorited':'')+'" data-action="fav" data-id="'+e.id+'">'+(o?'⭐':'☆')+'</button></div><button class="card-detail-btn" data-action="detail" data-id="'+e.id+'">查看详情</button></div></div></div>';t.insertAdjacentHTML('beforeend',a)});bindCardEvents();setupScrollAnimation()}
 
-        searchBtn.addEventListener('click', () => {
-            const keyword = searchInput.value.toLowerCase().trim();
-            cards.forEach(card => {
-                const title = card.querySelector('.card-title').textContent.toLowerCase();
-                const desc = card.querySelector('.card-desc').textContent.toLowerCase();
-                if (keyword === '' || title.includes(keyword) || desc.includes(keyword)) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-        });
+        function setupScrollAnimation(){var e=document.querySelectorAll('.card:not(.card-visible)');if(e.length===0)return;if('IntersectionObserver'in window){var t=new IntersectionObserver(function(t){t.forEach(function(t){if(t.isIntersecting){var n=t.target,i=Array.prototype.indexOf.call(e,n),o=i*0.1+'s';n.style.transition='opacity 0.6s ease-out '+o+', transform 0.6s ease-out '+o;n.style.opacity='1';n.style.transform='translateY(0)';n.classList.add('card-visible');n.addEventListener('transitionend',function e(t){if(t.propertyName==='transform'){n.style.transition='';n.removeEventListener('transitionend',e)}});this.unobserve(n)}}},{threshold:0.2,rootMargin:'0px 0px -50px 0px'});e.forEach(function(e){t.observe(e)})}else{e.forEach(function(e){e.style.opacity='1';e.style.transform='translateY(0)';e.classList.add('card-visible')})}}
 
-        // 支持回车键搜索
-        searchInput.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') {
-                searchBtn.click();
-            }
-        });
+        function bindCardEvents(){var e=document.getElementById('cardsContainer');e.removeEventListener('click',cardClickHandler);e.addEventListener('click',cardClickHandler)}
+        function cardClickHandler(e){var t=e.target.closest('[data-action]');if(t){var n=t.getAttribute('data-action'),i=parseInt(t.getAttribute('data-id'),10);if(n==='like'){e.stopPropagation();toggleLike(i);return}if(n==='fav'){e.stopPropagation();toggleFavorite(i);return}if(n==='detail'){e.stopPropagation();openDetail(i);return}}var o=e.target.closest('.card');if(o){var i=parseInt(o.getAttribute('data-id'),10);openDetail(i)}}
+
+        function getFilteredAndSortedData(){var e=cardsData.slice();if(currentCategory!=='all'){e=e.filter(function(e){return e.category===currentCategory})}if(currentSearch!==''){var t=currentSearch;e=e.filter(function(e){return e.title.indexOf(t)!==-1||e.desc.indexOf(t)!==-1})}if(currentSort==='likes'){e.sort(function(e,t){var n=likesCountData[e.id]||e.initialLikes,i=likesCountData[t.id]||t.initialLikes;return i-n})}else if(currentSort==='name'){e.sort(function(e,t){return e.title.localeCompare(t.title,'zh-CN')})}return e}
+        function refreshCards(){var e=getFilteredAndSortedData();renderCards(e)}
+
+        function sortCards(e){currentSort=e;var t=document.querySelectorAll('#sortBar .sort-btn');t.forEach(function(t){if(t.getAttribute('data-sort')===e){t.classList.add('active')}else{t.classList.remove('active')}});refreshCards()}
+
+        function openDetail(e){var t=cardsData.find(function(t){return t.id===e});if(!t)return;currentModalCardId=e;var n=likesCountData[e]||t.initialLikes,i=userLikes.indexOf(e)!==-1,o=favorites.indexOf(e)!==-1;document.getElementById('modalImage').style.backgroundImage='url(\''+t.image+'\')';document.getElementById('modalCategory').textContent=t.category+'区';document.getElementById('modalTitle').textContent=t.title;document.getElementById('modalDetailDesc').textContent=t.detailDesc;var r=document.getElementById('modalActions');r.innerHTML='<button class="action-btn like-btn'+(i?' liked':'')+'" id="modalLikeBtn" data-action="like" data-id="'+e+'">'+(i?'❤':'🤍')+' 点赞 '+n+'</button><button class="action-btn fav-btn'+(o?' favorited':'')+'" id="modalFavBtn" data-action="fav" data-id="'+e+'">'+(o?'⭐':'☆')+' 收藏</button>';document.getElementById('modalLikeBtn').addEventListener('click',function(t){t.stopPropagation();toggleLike(e)});document.getElementById('modalFavBtn').addEventListener('click',function(t){t.stopPropagation();toggleFavorite(e)});var a=document.getElementById('modalOverlay');a.classList.remove('closing');a.classList.add('visible');document.body.style.overflow='hidden'}
+        function closeDetail(){var e=document.getElementById('modalOverlay');e.classList.remove('visible');e.classList.add('closing');document.body.style.overflow='';setTimeout(function(){e.classList.remove('closing')},260);currentModalCardId=null}
+
+        function toggleLike(e){var t=userLikes.indexOf(e),n=likesCountData[e]||(cardsData.find(function(t){return t.id===e})||{}).initialLikes||0;if(t!==-1){userLikes.splice(t,1);likesCountData[e]=Math.max(0,n-1)}else{userLikes.push(e);likesCountData[e]=n+1}saveLikesData(likesCountData);saveUserLikes(userLikes);refreshCards();if(currentModalCardId===e){openDetail(e)}}
+        function toggleFavorite(e){var t=favorites.indexOf(e);if(t!==-1){favorites.splice(t,1)}else{favorites.push(e)}saveFavorites(favorites);refreshCards();if(currentModalCardId===e){openDetail(e)}}
+
+        function debounce(e,t){var n=null;return function(){var i=this,o=arguments;clearTimeout(n);n=setTimeout(function(){e.apply(i,o)},t)}}
+        function performSearch(){var e=document.getElementById('searchInput');currentSearch=e.value.toLowerCase().trim();refreshCards()}
+        var debouncedSearch=debounce(performSearch,300);
+
+        function filterByCategory(e){currentCategory=e;var t=document.querySelectorAll('#categoryContainer .category-tag');t.forEach(function(t){if(t.getAttribute('data-category')===e){t.classList.add('active')}else{t.classList.remove('active')}});refreshCards()}
+
+        var FALLBACK_QUOTES=[{text:'天行健，君子以自强不息。',source:'《周易》'},{text:'千里之行，始于足下。',source:'老子《道德经》'},{text:'学而不思则罔，思而不学则殆。',source:'孔子《论语》'},{text:'路漫漫其修远兮，吾将上下而求索。',source:'屈原《离骚》'},{text:'宝剑锋从磨砺出，梅花香自苦寒来。',source:'《警世贤文》'}],quoteAbortController=null,quoteFetching=false;
+
+        function showQuoteLoading(){document.getElementById('quoteLoading').style.display='flex';document.getElementById('quoteContent').style.display='none'}
+        function showQuoteContent(e,t){document.getElementById('quoteLoading').style.display='none';document.getElementById('quoteContent').style.display='block';document.getElementById('quoteText').textContent=e;document.getElementById('quoteSource').textContent='—— '+t}
+        function showFallbackQuote(){var e=Math.floor(Math.random()*FALLBACK_QUOTES.length),t=FALLBACK_QUOTES[e];showQuoteContent(t.text,t.source)}
+        function fetchHitokoto(){if(quoteAbortController){quoteAbortController.abort()}quoteFetching=true;showQuoteLoading();quoteAbortController=new AbortController();var e=quoteAbortController.signal,t=setTimeout(function(){quoteAbortController.abort()},5000);fetch('https://v1.hitokoto.cn/',{signal:e}).then(function(n){clearTimeout(t);if(!n.ok){throw new Error('HTTP '+n.status)}return n.json()}).then(function(e){showQuoteContent(e.hitokoto,e.from);quoteFetching=false;quoteAbortController=null}).catch(function(e){clearTimeout(t);showFallbackQuote();quoteFetching=false;quoteAbortController=null})}
+
+        function init(){var e=document.querySelectorAll('#categoryContainer .category-tag');e.forEach(function(e){e.addEventListener('click',function(){var e=this.getAttribute('data-category');filterByCategory(e)})});var t=document.querySelectorAll('#sortBar .sort-btn');t.forEach(function(e){e.addEventListener('click',function(){var e=this.getAttribute('data-sort');sortCards(e)})});var n=document.getElementById('searchInput');n.addEventListener('input',debouncedSearch);document.getElementById('searchBtn').addEventListener('click',function(){performSearch()});n.addEventListener('keyup',function(e){if(e.key==='Enter'){performSearch()}});document.getElementById('modalClose').addEventListener('click',closeDetail);document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this){closeDetail()}});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&currentModalCardId!==null){closeDetail()}});document.getElementById('dailyQuote').addEventListener('click',function(){fetchHitokoto()});refreshCards();fetchHitokoto()}
+        document.addEventListener('DOMContentLoaded',init);
     </script>
 </body>
 </html>
