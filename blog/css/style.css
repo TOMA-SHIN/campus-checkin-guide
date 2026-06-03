@@ -1,0 +1,1652 @@
+/* ============================================================
+   ZenBlog - 个人博客/作品集 CSS
+   深色主题 + 暖色点缀 | Zen 极简风格
+   类名前缀：blog-
+   ============================================================ */
+
+/* ---- Google Fonts ---- */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ============================================================
+   1. CSS 变量 & 全局重置
+   ============================================================ */
+
+:root {
+  /* 配色 */
+  --blog-bg: #0f0f0f;
+  --blog-bg-secondary: #1a1a1a;
+  --blog-bg-tertiary: #242424;
+  --blog-text: #e0e0e0;
+  --blog-text-secondary: #a0a0a0;
+  --blog-text-muted: #6b7280;
+  --blog-accent: #f59e0b;
+  --blog-accent-hover: #d97706;
+  --blog-accent-light: rgba(245, 158, 11, 0.12);
+  --blog-accent-glow: rgba(245, 158, 11, 0.25);
+  --blog-border: #2a2a2a;
+  --blog-border-light: #333;
+  --blog-card-bg: #1a1a1a;
+  --blog-card-hover: #1e1e1e;
+  --blog-overlay: rgba(0, 0, 0, 0.75);
+  --blog-success: #10b981;
+  --blog-danger: #ef4444;
+  --blog-white: #ffffff;
+
+  /* 字体 */
+  --blog-font-serif: 'Noto Serif SC', 'Source Han Serif SC', serif;
+  --blog-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --blog-font-sans: 'Noto Serif SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* 间距 */
+  --blog-space-xs: 4px;
+  --blog-space-sm: 8px;
+  --blog-space-md: 16px;
+  --blog-space-lg: 24px;
+  --blog-space-xl: 32px;
+  --blog-space-2xl: 48px;
+  --blog-space-3xl: 64px;
+
+  /* 圆角 */
+  --blog-radius-sm: 6px;
+  --blog-radius-md: 10px;
+  --blog-radius-lg: 16px;
+  --blog-radius-xl: 20px;
+  --blog-radius-full: 9999px;
+
+  /* 阴影 */
+  --blog-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --blog-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --blog-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.45);
+  --blog-shadow-glow: 0 0 20px var(--blog-accent-glow);
+
+  /* 过渡 */
+  --blog-transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --blog-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --blog-transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --blog-transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---- 全局重置 ---- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--blog-font-serif);
+  background-color: var(--blog-bg);
+  color: var(--blog-text);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--blog-accent);
+  text-decoration: none;
+  transition: color var(--blog-transition-fast);
+}
+a:hover {
+  color: var(--blog-accent-hover);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input, textarea {
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
+
+/* ---- 选中颜色 ---- */
+::selection {
+  background-color: var(--blog-accent);
+  color: var(--blog-bg);
+}
+
+/* ---- 滚动条美化 ---- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--blog-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: var(--blog-radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #333 var(--blog-bg);
+}
+
+/* ============================================================
+   2. 导航栏 — 固定顶部 · 毛玻璃
+   ============================================================ */
+
+.blog-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 var(--blog-space-xl);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 15, 15, 0.65);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border-bottom: 1px solid var(--blog-border);
+  transition: background var(--blog-transition), box-shadow var(--blog-transition);
+}
+.blog-nav.scrolled {
+  background: rgba(15, 15, 15, 0.88);
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.4);
+}
+
+.blog-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--blog-space-sm);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--blog-white);
+  letter-spacing: 1px;
+}
+.blog-nav-brand:hover {
+  color: var(--blog-accent);
+}
+.blog-nav-brand .brand-icon {
+  font-size: 1.4rem;
+}
+
+.blog-nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--blog-space-xl);
+}
+.blog-nav-links a {
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--blog-text-secondary);
+  padding: 4px 0;
+  transition: color var(--blog-transition-fast);
+}
+.blog-nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--blog-accent);
+  border-radius: 2px;
+  transition: width var(--blog-transition);
+}
+.blog-nav-links a:hover,
+.blog-nav-links a.active {
+  color: var(--blog-accent);
+}
+.blog-nav-links a:hover::after,
+.blog-nav-links a.active::after {
+  width: 100%;
+}
+
+/* 汉堡菜单按钮 */
+.blog-nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 1001;
+}
+.blog-nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--blog-text);
+  border-radius: 2px;
+  transition: all var(--blog-transition);
+  transform-origin: center;
+}
+.blog-nav-toggle.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.blog-nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.blog-nav-toggle.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ============================================================
+   3. Hero 区域
+   ============================================================ */
+
+.blog-hero {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px var(--blog-space-xl) var(--blog-space-3xl);
+  overflow: hidden;
+}
+
+.blog-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 60%),
+    var(--blog-bg);
+}
+
+.blog-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+}
+
+.blog-hero h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: var(--blog-space-lg);
+  color: var(--blog-white);
+  letter-spacing: 2px;
+}
+
+.blog-hero h1 .highlight {
+  color: var(--blog-accent);
+}
+
+.blog-hero .subtitle {
+  font-size: 1.15rem;
+  color: var(--blog-text-secondary);
+  margin-bottom: var(--blog-space-lg);
+  line-height: 1.7;
+}
+
+.blog-hero .author-brief {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--blog-space-sm);
+  padding: var(--blog-space-sm) var(--blog-space-lg);
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-full);
+  font-size: 0.9rem;
+  color: var(--blog-text-secondary);
+}
+.blog-hero .author-brief img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* 打字机效果 */
+.blog-typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid var(--blog-accent);
+  animation: blog-blink-caret 0.75s step-end infinite;
+}
+@keyframes blog-blink-caret {
+  50% { border-color: transparent; }
+}
+
+/* 滚动提示 */
+.blog-scroll-hint {
+  position: absolute;
+  bottom: var(--blog-space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--blog-space-sm);
+  color: var(--blog-text-muted);
+  font-size: 0.8rem;
+  animation: blog-bounce-down 2s infinite;
+}
+.blog-scroll-hint .scroll-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--blog-accent);
+  opacity: 0.6;
+}
+@keyframes blog-bounce-down {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+  50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+}
+
+/* ============================================================
+   4. 分类筛选
+   ============================================================ */
+
+.blog-category-bar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--blog-space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--blog-space-sm);
+  justify-content: center;
+}
+
+.blog-category-tag {
+  padding: 8px 22px;
+  font-size: 0.9rem;
+  color: var(--blog-text-secondary);
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-full);
+  cursor: pointer;
+  transition: all var(--blog-transition);
+  user-select: none;
+}
+.blog-category-tag:hover {
+  border-color: var(--blog-accent);
+  color: var(--blog-accent);
+  background: var(--blog-accent-light);
+}
+.blog-category-tag.active {
+  background: var(--blog-accent);
+  color: var(--blog-bg);
+  border-color: var(--blog-accent);
+  box-shadow: var(--blog-shadow-glow);
+}
+
+/* ============================================================
+   5. 文章卡片
+   ============================================================ */
+
+.blog-posts-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--blog-space-2xl) var(--blog-space-xl);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--blog-space-lg);
+}
+
+.blog-card {
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-lg);
+  overflow: hidden;
+  transition: transform var(--blog-transition), box-shadow var(--blog-transition), border-color var(--blog-transition);
+  display: flex;
+  flex-direction: column;
+}
+.blog-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.blog-card-cover {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.blog-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.blog-card:hover .blog-card-cover img {
+  transform: scale(1.1);
+}
+
+.blog-card-category {
+  position: absolute;
+  top: var(--blog-space-md);
+  left: var(--blog-space-md);
+  padding: 4px 14px;
+  font-size: 0.78rem;
+  color: var(--blog-accent);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  border-radius: var(--blog-radius-full);
+  font-weight: 500;
+  z-index: 1;
+}
+
+.blog-card-body {
+  padding: var(--blog-space-lg);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.blog-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--blog-white);
+  line-height: 1.4;
+  margin-bottom: var(--blog-space-sm);
+  transition: color var(--blog-transition-fast);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.blog-card:hover .blog-card-title {
+  color: var(--blog-accent);
+}
+
+.blog-card-summary {
+  font-size: 0.9rem;
+  color: var(--blog-text-secondary);
+  line-height: 1.6;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: var(--blog-space-md);
+}
+
+.blog-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--blog-space-md);
+  border-top: 1px solid var(--blog-border);
+  font-size: 0.82rem;
+  color: var(--blog-text-muted);
+}
+.blog-card-meta .meta-left {
+  display: flex;
+  align-items: center;
+  gap: var(--blog-space-md);
+}
+.blog-card-meta .meta-left span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.blog-card-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--blog-space-sm);
+}
+
+/* 点赞按钮 */
+.blog-like-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 0.82rem;
+  color: var(--blog-text-muted);
+  background: transparent;
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-sm);
+  transition: all var(--blog-transition-fast);
+  cursor: pointer;
+}
+.blog-like-btn:hover {
+  color: var(--blog-danger);
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.06);
+}
+.blog-like-btn.liked {
+  color: var(--blog-danger);
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+}
+.blog-like-btn .like-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* 星标评分组件 */
+.blog-star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.blog-star-rating .star {
+  font-size: 1.1rem;
+  color: #444;
+  cursor: pointer;
+  transition: color var(--blog-transition-fast), transform var(--blog-transition-fast);
+}
+.blog-star-rating .star:hover {
+  transform: scale(1.2);
+}
+.blog-star-rating .star.filled,
+.blog-star-rating .star.hovered {
+  color: var(--blog-accent);
+}
+.blog-star-rating .star-score {
+  font-size: 0.8rem;
+  color: var(--blog-text-muted);
+  margin-left: 4px;
+}
+
+/* ============================================================
+   6. 文章详情页
+   ============================================================ */
+
+.blog-article {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--blog-space-2xl) var(--blog-space-xl);
+}
+
+.blog-article-header {
+  margin-bottom: var(--blog-space-2xl);
+}
+
+.blog-article-header .blog-category-tag {
+  display: inline-block;
+  margin-bottom: var(--blog-space-md);
+  cursor: default;
+}
+
+.blog-article-header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--blog-white);
+  line-height: 1.3;
+  margin-bottom: var(--blog-space-lg);
+}
+
+.blog-article-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--blog-space-lg);
+  color: var(--blog-text-muted);
+  font-size: 0.9rem;
+}
+.blog-article-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.blog-article-cover {
+  width: 100%;
+  border-radius: var(--blog-radius-lg);
+  margin-bottom: var(--blog-space-2xl);
+  overflow: hidden;
+}
+.blog-article-cover img {
+  width: 100%;
+  border-radius: var(--blog-radius-lg);
+}
+
+/* 文章内容排版 */
+.blog-article-content {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--blog-text);
+}
+.blog-article-content h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--blog-white);
+  margin: var(--blog-space-2xl) 0 var(--blog-space-lg);
+  padding-bottom: var(--blog-space-sm);
+  border-bottom: 1px solid var(--blog-border);
+}
+.blog-article-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--blog-white);
+  margin: var(--blog-space-xl) 0 var(--blog-space-md);
+}
+.blog-article-content p {
+  margin-bottom: var(--blog-space-lg);
+}
+.blog-article-content ul,
+.blog-article-content ol {
+  margin-bottom: var(--blog-space-lg);
+  padding-left: var(--blog-space-xl);
+}
+.blog-article-content ul li {
+  list-style: disc;
+  margin-bottom: var(--blog-space-sm);
+}
+.blog-article-content ol li {
+  list-style: decimal;
+  margin-bottom: var(--blog-space-sm);
+}
+
+/* 引用 */
+.blog-article-content blockquote {
+  margin: var(--blog-space-xl) 0;
+  padding: var(--blog-space-lg) var(--blog-space-xl);
+  border-left: 4px solid var(--blog-accent);
+  background: var(--blog-card-bg);
+  border-radius: 0 var(--blog-radius-md) var(--blog-radius-md) 0;
+  color: var(--blog-text-secondary);
+  font-style: italic;
+  font-size: 1rem;
+  position: relative;
+}
+
+/* 代码块 */
+.blog-article-content code {
+  font-family: var(--blog-font-mono);
+  font-size: 0.88em;
+  padding: 2px 8px;
+  background: var(--blog-bg-tertiary);
+  border-radius: var(--blog-radius-sm);
+  color: var(--blog-accent);
+}
+.blog-article-content pre {
+  margin: var(--blog-space-xl) 0;
+  padding: var(--blog-space-lg);
+  background: var(--blog-bg-tertiary);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-md);
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.blog-article-content pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* 文章内图片 */
+.blog-article-content img {
+  margin: var(--blog-space-xl) auto;
+  border-radius: var(--blog-radius-md);
+  box-shadow: var(--blog-shadow-md);
+  cursor: zoom-in;
+}
+
+/* ============================================================
+   7. 底部操作栏（文章详情页）
+   ============================================================ */
+
+.blog-article-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--blog-space-lg);
+  margin-top: var(--blog-space-3xl);
+  padding: var(--blog-space-xl) 0;
+  border-top: 1px solid var(--blog-border);
+  border-bottom: 1px solid var(--blog-border);
+}
+
+.blog-action-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--blog-space-sm);
+  padding: 10px 22px;
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-full);
+  font-size: 0.9rem;
+  color: var(--blog-text-secondary);
+  transition: all var(--blog-transition-fast);
+}
+.blog-action-btn:hover {
+  border-color: var(--blog-accent);
+  color: var(--blog-accent);
+  background: var(--blog-accent-light);
+}
+.blog-action-btn.liked {
+  color: var(--blog-danger);
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+}
+.blog-action-btn .action-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* 分享按钮弹出面板 */
+.blog-share-panel {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  display: flex;
+  gap: var(--blog-space-sm);
+  padding: var(--blog-space-sm) var(--blog-space-md);
+  background: var(--blog-bg-tertiary);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-md);
+  box-shadow: var(--blog-shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--blog-transition);
+  z-index: 10;
+  white-space: nowrap;
+}
+.blog-share-panel.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(4px);
+}
+.blog-share-panel a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--blog-card-bg);
+  font-size: 1.1rem;
+  transition: all var(--blog-transition-fast);
+}
+.blog-share-panel a:hover {
+  background: var(--blog-accent-light);
+  transform: scale(1.1);
+}
+
+/* ============================================================
+   8. 评论区
+   ============================================================ */
+
+.blog-comments {
+  max-width: 800px;
+  margin: var(--blog-space-2xl) auto;
+  padding: 0 var(--blog-space-xl);
+}
+
+.blog-comments h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--blog-white);
+  margin-bottom: var(--blog-space-lg);
+}
+
+.blog-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--blog-space-md);
+  margin-bottom: var(--blog-space-2xl);
+  padding: var(--blog-space-lg);
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-lg);
+}
+.blog-comment-form .form-row {
+  display: flex;
+  gap: var(--blog-space-md);
+}
+.blog-comment-form input,
+.blog-comment-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--blog-bg-tertiary);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-sm);
+  color: var(--blog-text);
+  font-size: 0.95rem;
+  transition: border-color var(--blog-transition-fast);
+}
+.blog-comment-form input:focus,
+.blog-comment-form textarea:focus {
+  border-color: var(--blog-accent);
+}
+.blog-comment-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.blog-comment-form .submit-btn {
+  align-self: flex-end;
+  padding: 10px 28px;
+  background: var(--blog-accent);
+  color: var(--blog-bg);
+  border: none;
+  border-radius: var(--blog-radius-full);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all var(--blog-transition-fast);
+}
+.blog-comment-form .submit-btn:hover {
+  background: var(--blog-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--blog-shadow-glow);
+}
+
+/* 评论列表 */
+.blog-comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--blog-space-md);
+}
+
+.blog-comment-item {
+  padding: var(--blog-space-lg);
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-md);
+}
+.blog-comment-item .comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--blog-space-sm);
+}
+.blog-comment-item .comment-name {
+  font-weight: 600;
+  color: var(--blog-white);
+  font-size: 0.9rem;
+}
+.blog-comment-item .comment-time {
+  font-size: 0.8rem;
+  color: var(--blog-text-muted);
+}
+.blog-comment-item .comment-content {
+  font-size: 0.92rem;
+  color: var(--blog-text-secondary);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   9. 简历页面
+   ============================================================ */
+
+.blog-resume {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--blog-space-2xl) var(--blog-space-xl);
+}
+
+/* 个人头像 */
+.blog-resume-header {
+  display: flex;
+  align-items: center;
+  gap: var(--blog-space-2xl);
+  margin-bottom: var(--blog-space-3xl);
+  padding-bottom: var(--blog-space-2xl);
+  border-bottom: 1px solid var(--blog-border);
+}
+
+.blog-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--blog-accent);
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.15);
+  flex-shrink: 0;
+}
+
+.blog-resume-info h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--blog-white);
+  margin-bottom: var(--blog-space-sm);
+}
+.blog-resume-info .title {
+  font-size: 1rem;
+  color: var(--blog-accent);
+  margin-bottom: var(--blog-space-sm);
+}
+.blog-resume-info .bio {
+  font-size: 0.92rem;
+  color: var(--blog-text-secondary);
+  line-height: 1.7;
+}
+.blog-resume-info .social-links {
+  display: flex;
+  gap: var(--blog-space-md);
+  margin-top: var(--blog-space-md);
+}
+.blog-resume-info .social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  font-size: 0.9rem;
+  color: var(--blog-text-secondary);
+  transition: all var(--blog-transition-fast);
+}
+.blog-resume-info .social-links a:hover {
+  border-color: var(--blog-accent);
+  color: var(--blog-accent);
+  background: var(--blog-accent-light);
+}
+
+/* 信息区块 */
+.blog-resume-section {
+  margin-bottom: var(--blog-space-2xl);
+}
+.blog-resume-section h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--blog-white);
+  margin-bottom: var(--blog-space-lg);
+  padding-left: var(--blog-space-md);
+  border-left: 3px solid var(--blog-accent);
+}
+
+.blog-resume-item {
+  display: flex;
+  gap: var(--blog-space-lg);
+  padding: var(--blog-space-lg);
+  margin-bottom: var(--blog-space-md);
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-md);
+  transition: border-color var(--blog-transition-fast);
+}
+.blog-resume-item:hover {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.blog-resume-item .item-year {
+  flex-shrink: 0;
+  min-width: 100px;
+  font-size: 0.85rem;
+  color: var(--blog-accent);
+  font-weight: 500;
+}
+.blog-resume-item .item-body h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--blog-white);
+  margin-bottom: 4px;
+}
+.blog-resume-item .item-body .item-sub {
+  font-size: 0.85rem;
+  color: var(--blog-text-muted);
+  margin-bottom: var(--blog-space-sm);
+}
+.blog-resume-item .item-body .item-desc {
+  font-size: 0.9rem;
+  color: var(--blog-text-secondary);
+  line-height: 1.6;
+}
+
+/* 技能条 */
+.blog-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--blog-space-md);
+}
+
+.blog-skill-item {
+  padding: var(--blog-space-md);
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-md);
+}
+.blog-skill-item .skill-name {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--blog-text);
+  margin-bottom: var(--blog-space-sm);
+}
+.blog-skill-item .skill-name span:last-child {
+  color: var(--blog-accent);
+  font-weight: 500;
+}
+
+.blog-skill-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--blog-bg-tertiary);
+  border-radius: var(--blog-radius-full);
+  overflow: hidden;
+}
+.blog-skill-bar .skill-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blog-accent), #fbbf24);
+  border-radius: var(--blog-radius-full);
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0;
+}
+.blog-skill-bar .skill-fill.animated {
+  /* width 由 JS 动态设置 */;
+}
+
+/* ============================================================
+   10. 留言板
+   ============================================================ */
+
+.blog-guestbook {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--blog-space-2xl) var(--blog-space-xl);
+}
+.blog-guestbook h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--blog-white);
+  text-align: center;
+  margin-bottom: var(--blog-space-sm);
+}
+.blog-guestbook .gb-subtitle {
+  text-align: center;
+  color: var(--blog-text-secondary);
+  margin-bottom: var(--blog-space-2xl);
+}
+
+/* 留言表单 */
+.blog-guestbook-form {
+  padding: var(--blog-space-xl);
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-lg);
+  margin-bottom: var(--blog-space-2xl);
+}
+.blog-guestbook-form h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--blog-white);
+  margin-bottom: var(--blog-space-lg);
+}
+.blog-guestbook-form .form-group {
+  margin-bottom: var(--blog-space-md);
+}
+.blog-guestbook-form input,
+.blog-guestbook-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--blog-bg-tertiary);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-sm);
+  color: var(--blog-text);
+  font-size: 0.95rem;
+  transition: border-color var(--blog-transition-fast);
+}
+.blog-guestbook-form input:focus,
+.blog-guestbook-form textarea:focus {
+  border-color: var(--blog-accent);
+}
+.blog-guestbook-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.blog-guestbook-form .submit-btn {
+  padding: 12px 32px;
+  background: var(--blog-accent);
+  color: var(--blog-bg);
+  border: none;
+  border-radius: var(--blog-radius-full);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all var(--blog-transition-fast);
+  cursor: pointer;
+}
+.blog-guestbook-form .submit-btn:hover {
+  background: var(--blog-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--blog-shadow-glow);
+}
+
+/* 留言卡片 */
+.blog-guestbook-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--blog-space-md);
+}
+
+.blog-gb-card {
+  padding: var(--blog-space-lg);
+  background: var(--blog-card-bg);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-md);
+  transition: border-color var(--blog-transition-fast);
+}
+.blog-gb-card:hover {
+  border-color: rgba(245, 158, 11, 0.15);
+}
+.blog-gb-card .gb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--blog-space-sm);
+}
+.blog-gb-card .gb-name {
+  font-weight: 600;
+  color: var(--blog-white);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: var(--blog-space-sm);
+}
+.blog-gb-card .gb-name .gb-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--blog-accent);
+  color: var(--blog-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.blog-gb-card .gb-time {
+  font-size: 0.8rem;
+  color: var(--blog-text-muted);
+}
+.blog-gb-card .gb-content {
+  font-size: 0.92rem;
+  color: var(--blog-text-secondary);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   11. Lightbox
+   ============================================================ */
+
+.blog-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+.blog-lightbox.open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s 0s;
+}
+
+.blog-lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: var(--blog-white);
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: background var(--blog-transition-fast);
+  z-index: 10;
+}
+.blog-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.blog-lightbox-img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--blog-radius-sm);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* 左右箭头 */
+.blog-lightbox-prev,
+.blog-lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  color: var(--blog-white);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all var(--blog-transition-fast);
+  z-index: 10;
+}
+.blog-lightbox-prev:hover,
+.blog-lightbox-next:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+.blog-lightbox-prev {
+  left: 20px;
+}
+.blog-lightbox-next {
+  right: 20px;
+}
+
+/* Lightbox 底部计数器 */
+.blog-lightbox-counter {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--blog-font-mono);
+}
+
+/* ============================================================
+   12. 返回顶部按钮
+   ============================================================ */
+
+.blog-back-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 900;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blog-accent);
+  border: none;
+  border-radius: 50%;
+  color: var(--blog-bg);
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: all var(--blog-transition);
+}
+.blog-back-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.blog-back-top:hover {
+  background: var(--blog-accent-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.4);
+}
+
+/* ============================================================
+   13. 阅读进度条
+   ============================================================ */
+
+.blog-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blog-accent), #fbbf24);
+  width: 0%;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+/* ============================================================
+   14. Toast 提示
+   ============================================================ */
+
+.blog-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 9998;
+  padding: 12px 24px;
+  background: var(--blog-bg-tertiary);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-full);
+  color: var(--blog-text);
+  font-size: 0.9rem;
+  box-shadow: var(--blog-shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--blog-transition);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.blog-toast.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+.blog-toast.success {
+  border-color: var(--blog-success);
+  color: var(--blog-success);
+}
+.blog-toast.error {
+  border-color: var(--blog-danger);
+  color: var(--blog-danger);
+}
+
+/* ============================================================
+   15. 加载动画
+   ============================================================ */
+
+.blog-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--blog-space-3xl);
+}
+.blog-loading .spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--blog-border);
+  border-top-color: var(--blog-accent);
+  border-radius: 50%;
+  animation: blog-spin 0.7s linear infinite;
+}
+@keyframes blog-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   16. 动画 —— 页面加载淡入 + 滚动 reveal + hover 微交互
+   ============================================================ */
+
+/* 页面加载淡入 */
+.blog-fade-in {
+  opacity: 0;
+  animation: blog-fade-in 0.7s ease forwards;
+}
+@keyframes blog-fade-in {
+  to { opacity: 1; }
+}
+
+/* 滚动出现动画 */
+.blog-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.blog-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.blog-reveal-delay-1 { transition-delay: 0.1s; }
+.blog-reveal-delay-2 { transition-delay: 0.2s; }
+.blog-reveal-delay-3 { transition-delay: 0.3s; }
+.blog-reveal-delay-4 { transition-delay: 0.4s; }
+.blog-reveal-delay-5 { transition-delay: 0.5s; }
+
+/* hover 微交互 —— 图标/按钮轻微上浮 */
+.blog-hover-lift {
+  transition: transform var(--blog-transition-fast);
+}
+.blog-hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* 徽章 pulse */
+.blog-badge-pulse {
+  animation: blog-pulse 2s infinite;
+}
+@keyframes blog-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+}
+
+/* ============================================================
+   17. 响应式设计
+   ============================================================ */
+
+/* 平板 768px */
+@media (max-width: 768px) {
+  /* 导航栏 */
+  .blog-nav {
+    padding: 0 var(--blog-space-lg);
+  }
+  .blog-nav-links {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: rgba(15, 15, 15, 0.96);
+    backdrop-filter: blur(18px);
+    padding: var(--blog-space-lg);
+    gap: var(--blog-space-lg);
+    border-bottom: 1px solid var(--blog-border);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--blog-transition);
+  }
+  .blog-nav-links.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  .blog-nav-toggle {
+    display: flex;
+  }
+
+  /* Hero */
+  .blog-hero {
+    min-height: 420px;
+    padding: 100px var(--blog-space-lg) var(--blog-space-2xl);
+  }
+  .blog-hero h1 {
+    font-size: 2rem;
+  }
+  .blog-hero .subtitle {
+    font-size: 1rem;
+  }
+
+  /* 文章卡片 */
+  .blog-posts-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    padding: var(--blog-space-xl) var(--blog-space-lg);
+    gap: var(--blog-space-md);
+  }
+
+  /* 文章详情 */
+  .blog-article {
+    padding: var(--blog-space-xl) var(--blog-space-lg);
+  }
+  .blog-article-header h1 {
+    font-size: 1.6rem;
+  }
+
+  /* 简历 */
+  .blog-resume-header {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--blog-space-lg);
+  }
+  .blog-resume-info .social-links {
+    justify-content: center;
+  }
+  .blog-resume-item {
+    flex-direction: column;
+    gap: var(--blog-space-sm);
+  }
+  .blog-resume-item .item-year {
+    min-width: auto;
+  }
+
+  /* 技能 */
+  .blog-skills {
+    grid-template-columns: 1fr;
+  }
+
+  /* Lightbox */
+  .blog-lightbox-prev {
+    left: 12px;
+  }
+  .blog-lightbox-next {
+    right: 12px;
+  }
+  .blog-lightbox-img {
+    max-width: 95vw;
+    max-height: 75vh;
+  }
+
+  /* 返回顶部 */
+  .blog-back-top {
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  /* 评论表单 */
+  .blog-comment-form .form-row {
+    flex-direction: column;
+  }
+}
+
+/* 手机 480px */
+@media (max-width: 480px) {
+  .blog-nav {
+    padding: 0 var(--blog-space-md);
+    height: 56px;
+  }
+  .blog-nav-brand {
+    font-size: 1.1rem;
+  }
+
+  .blog-hero {
+    min-height: 360px;
+    padding: 80px var(--blog-space-md) var(--blog-space-xl);
+  }
+  .blog-hero h1 {
+    font-size: 1.6rem;
+  }
+  .blog-hero .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .blog-category-bar {
+    padding: 0 var(--blog-space-md);
+  }
+  .blog-category-tag {
+    padding: 6px 16px;
+    font-size: 0.82rem;
+  }
+
+  .blog-posts-grid {
+    grid-template-columns: 1fr;
+    padding: var(--blog-space-lg) var(--blog-space-md);
+  }
+
+  .blog-card-cover {
+    height: 180px;
+  }
+
+  .blog-article-header h1 {
+    font-size: 1.35rem;
+  }
+  .blog-article-content {
+    font-size: 0.95rem;
+  }
+  .blog-article-content h2 {
+    font-size: 1.3rem;
+  }
+  .blog-article-content h3 {
+    font-size: 1.1rem;
+  }
+  .blog-article-content pre {
+    font-size: 0.82rem;
+    padding: var(--blog-space-md);
+  }
+
+  .blog-article-actions {
+    flex-wrap: wrap;
+    gap: var(--blog-space-sm);
+  }
+  .blog-action-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .blog-back-top {
+    bottom: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .blog-toast {
+    font-size: 0.82rem;
+    padding: 10px 18px;
+    bottom: 60px;
+  }
+
+  .blog-guestbook {
+    padding: var(--blog-space-xl) var(--blog-space-md);
+  }
+  .blog-guestbook-form {
+    padding: var(--blog-space-lg);
+  }
+
+  .blog-resume {
+    padding: var(--blog-space-xl) var(--blog-space-md);
+  }
+  .blog-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  .blog-resume-info h1 {
+    font-size: 1.5rem;
+  }
+}
