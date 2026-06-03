@@ -226,7 +226,7 @@ input, textarea {
 }
 
 /* 汉堡菜单按钮 */
-.blog-nav-toggle {
+.blog-hamburger {
   display: none;
   flex-direction: column;
   justify-content: center;
@@ -237,7 +237,7 @@ input, textarea {
   cursor: pointer;
   z-index: 1001;
 }
-.blog-nav-toggle span {
+.blog-hamburger span {
   display: block;
   width: 22px;
   height: 2px;
@@ -246,14 +246,14 @@ input, textarea {
   transition: all var(--blog-transition);
   transform-origin: center;
 }
-.blog-nav-toggle.active span:nth-child(1) {
+.blog-hamburger.active span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
 }
-.blog-nav-toggle.active span:nth-child(2) {
+.blog-hamburger.active span:nth-child(2) {
   opacity: 0;
   transform: scaleX(0);
 }
-.blog-nav-toggle.active span:nth-child(3) {
+.blog-hamburger.active span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
 }
 
@@ -1474,7 +1474,7 @@ input, textarea {
     opacity: 1;
     visibility: visible;
   }
-  .blog-nav-toggle {
+  .blog-hamburger {
     display: flex;
   }
 
