@@ -45,25 +45,29 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background-color:#F8
 .recommendations{padding:1rem 1rem 2rem;max-width:1400px;margin:0 auto}
 .recommendations h2{font-size:1.5rem;margin-bottom:1.5rem;padding-left:10px;border-left:4px solid #4A90D9}
 .cards-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;justify-items:center}
-.card{width:300px;height:420px;background-color:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);position:relative;cursor:pointer;display:flex;flex-direction:column;opacity:0;transform:translateY(30px);transition:opacity 0.5s ease,transform 0.5s cubic-bezier(0.4,0,0.2,1),box-shadow 0.35s cubic-bezier(0.4,0,0.2,1);will-change:transform,opacity}
-.card:hover{transform:translateY(-8px);box-shadow:0 12px 30px rgba(0,0,0,0.15)}
-.card-image{width:100%;height:200px;background-size:cover;background-position:center;flex-shrink:0;position:relative;transition:transform 0.4s cubic-bezier(0.4,0,0.2,1)}
-.card:hover .card-image{transform:scale(1.08)}
-.card-image::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to top,rgba(0,0,0,0.35) 0%,rgba(0,0,0,0.05) 50%,transparent 100%);opacity:0;transition:opacity 0.4s cubic-bezier(0.4,0,0.2,1);pointer-events:none}
+.card{width:300px;height:420px;background-color:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);position:relative;cursor:pointer;display:flex;flex-direction:column;opacity:0;transform:translateY(30px);transition:opacity 0.5s ease,transform 0.45s cubic-bezier(0.4,0,0.2,1),box-shadow 0.45s cubic-bezier(0.4,0,0.2,1),border-color 0.3s ease;will-change:transform,opacity;border:1px solid transparent}
+.card:hover{transform:translateY(-12px) scale(1.02);box-shadow:0 24px 48px rgba(0,0,0,0.2);border-color:rgba(74,144,217,0.2)}
+.card-image{width:100%;height:200px;background-size:cover;background-position:center;flex-shrink:0;position:relative;transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+.card:hover .card-image{transform:scale(1.15)}
+.card-image::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.1) 50%,rgba(74,144,217,0.2) 100%);opacity:0;transition:opacity 0.4s cubic-bezier(0.4,0,0.2,1);pointer-events:none}
 .card:hover .card-image::after{opacity:1}
 .card-content{padding:1.2rem;display:flex;flex-direction:column;flex:1}
-.card-category{display:inline-block;padding:4px 12px;background-color:rgba(74,144,217,0.1);color:#4A90D9;border-radius:10px;font-size:0.8rem;margin-bottom:0.8rem;width:fit-content}
-.card-title{font-size:1.2rem;font-weight:600;margin-bottom:0.5rem;color:#1F2937}
+.card:hover .card-content .card-category{background-color:rgba(74,144,217,0.18);color:#3d80c7}
+.card:hover .card-content .card-title{color:#4A90D9}
+.card-category{display:inline-block;padding:4px 12px;background-color:rgba(74,144,217,0.1);color:#4A90D9;border-radius:10px;font-size:0.8rem;margin-bottom:0.8rem;width:fit-content;transition:background-color 0.3s ease,color 0.3s ease}
+.card-title{font-size:1.2rem;font-weight:600;margin-bottom:0.5rem;color:#1F2937;transition:color 0.3s ease}
 .card-desc{font-size:0.9rem;color:#6B7280;line-height:1.5;margin-bottom:0.6rem;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.card-actions{display:flex;align-items:center;justify-content:space-between;padding-top:0.5rem;border-top:1px solid #F3F4F6;margin-top:auto}
+.card-actions{display:flex;align-items:center;justify-content:space-between;padding-top:0.5rem;border-top:1px solid #F3F4F6;margin-top:auto;transition:border-color 0.3s ease}
+.card:hover .card-actions{border-top-color:#E5E7EB}
 .card-actions .action-group{display:flex;gap:12px;align-items:center}
 .action-btn{display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;font-size:0.9rem;color:#9CA3AF;transition:color 0.2s,transform 0.2s cubic-bezier(0.4,0,0.2,1);padding:4px 6px;border-radius:6px}
 .action-btn:hover{transform:scale(1.1);background-color:#F9FAFB}
 .action-btn.like-btn.liked{color:#EF4444}
 .action-btn.fav-btn.favorited{color:#F59E0B}
 .action-btn .like-count{font-size:0.8rem;color:#6B7280}
-.card-detail-btn{padding:6px 14px;background-color:#4A90D9;color:white;border:none;border-radius:8px;cursor:pointer;font-size:0.85rem;transition:background-color 0.3s cubic-bezier(0.4,0,0.2,1);white-space:nowrap}
-.card-detail-btn:hover{background-color:#3d80c7}
+.card-detail-btn{padding:6px 14px;background-color:#4A90D9;color:white;border:none;border-radius:8px;cursor:pointer;font-size:0.85rem;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);white-space:nowrap}
+.card-detail-btn:hover{background-color:#3d80c7;transform:scale(1.06)}
+.card:hover .card-detail-btn{background-color:#3d80c7;box-shadow:0 4px 12px rgba(74,144,217,0.35)}
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.6);z-index:1000;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity 0.35s cubic-bezier(0.4,0,0.2,1),visibility 0s 0.35s,backdrop-filter 0.35s ease}
 .modal-overlay.visible{opacity:1;visibility:visible;transition:opacity 0.35s cubic-bezier(0.4,0,0.2,1),visibility 0s 0s,backdrop-filter 0.35s ease}
 .modal-overlay.closing{opacity:0;visibility:visible;transition:opacity 0.25s ease-in,visibility 0s 0.25s}
@@ -164,7 +168,7 @@ var cardsData=[
 {id:4,title:'校园咖啡角',desc:'温馨舒适的氛围，醇香的咖啡，是休闲小憩和小组讨论的好地方。',category:'美食',image:'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80',detailDesc:'位于学生活动中心一楼的校园咖啡角，由学生创业团队运营。提供现磨咖啡、手工奶茶和精致甜点，价格亲民（美式15元、拿铁18元）。店内设有舒适的沙发区和高脚桌工作区，定期举办小型音乐会和读书分享会，是校园文艺青年的聚集地。免费Wi-Fi，支持手机充电，营业时间：9:00-22:00。',initialLikes:35},
 {id:5,title:'樱花大道',desc:'春日樱花盛开，美不胜收，是校园里最浪漫的风景线。',category:'休闲',image:'https://images.unsplash.com/photo-1522383225653-ed111181a951?w=600&q=80',detailDesc:'每年3月下旬至4月上旬，长约500米的樱花大道两侧近百株樱花同时绽放，形成粉白色的花廊。学校每年举办樱花文化节，有汉服游园、摄影比赛等活动，吸引众多市民前来观赏。最佳观赏时间是清晨7-8点和黄昏5-6点，光线柔和，拍照效果最佳。位于校园南门至图书馆之间，步行约15分钟。',initialLikes:89},
 {id:6,title:'湖心亭',desc:'位于校园中心湖畔，宁静雅致，是读书、冥想的理想场所。',category:'休闲',image:'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&q=80',detailDesc:'湖心亭建于上世纪80年代，是校园的标志性建筑之一。通过九曲桥与岸边相连，亭内设有石桌石凳。湖中养有锦鲤和天鹅，周围垂柳依依，景色四季各异。清晨常有学生在此晨读，傍晚则是情侣约会和好友聊天的浪漫之地。湖心亭夜间有景观灯照明，是拍摄校园夜景的最佳取景点。',initialLikes:47},
-{id:7,title:'风雨操场',desc:'设施齐全的室内运动场馆，包含篮球、羽毛球、乒乓球等场地。',category:'运动',image:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80',detailDesc:'风雨操场总面积达8000平方米，包含4个标准篮球场、12个羽毛球场和16张乒乓球桌。配备专业运动地板和LED照明系统，更衣室和淋浴间设施完善。凭学生证免费入场，周末和晚间时段人较多，建议错峰前往。周一至周五开放时间：6:00-22:00，周末：8:00-21:00。篮球场晚间需提前预约。',initialLikes:38},
+{id:6,title:'风雨操场',desc:'设施齐全的室内运动场馆，包含篮球、羽毛球、乒乓球等场地。',category:'运动',image:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80',detailDesc:'风雨操场总面积达8000平方米，包含4个标准篮球场、12个羽毛球场和16张乒乓球桌。配备专业运动地板和LED照明系统，更衣室和淋浴间设施完善。凭学生证免费入场，周末和晚间时段人较多，建议错峰前往。周一至周五开放时间：6:00-22:00，周末：8:00-21:00。篮球场晚间需提前预约。',initialLikes:38},
 {id:8,title:'环山步道',desc:'环绕校园的环山步道，风景优美，是晨跑和散步的最佳选择。',category:'运动',image:'https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80',detailDesc:'全长3.5公里的环山步道，柏油路面平整，坡度适中，沿途设有休息长椅和里程标识。步道穿越校园后山的小森林，空气清新，鸟语花香。沿途可俯瞰整个校园全景，是摄影爱好者的取景胜地。清晨6-8点是晨跑高峰，夜晚有柔和的路灯照明至23:00。全程步行约40分钟，跑步约20分钟，适合各年龄段锻炼。',initialLikes:51}
 ];
 var currentCategory='all',currentSort='likes',currentSearch='',currentModalCardId=null;
