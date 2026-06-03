@@ -6,8 +6,16 @@
 <title>校园打卡指南</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background-color:#F8FAFC;color:#1F2937;line-height:1.6}
-.hero{position:relative;height:400px;background:linear-gradient(rgba(74,144,217,0.7),rgba(74,144,217,0.5)),url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&q=80');background-size:cover;background-position:center;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.7s cubic-bezier(0.4,0,0.2,1),transform 0.7s cubic-bezier(0.4,0,0.2,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.12s}
+.reveal-delay-2{transition-delay:0.24s}
+.reveal-delay-3{transition-delay:0.36s}
+.hero{position:relative;height:400px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center}
+.hero-bg{position:absolute;top:0;left:0;width:100%;height:120%;background:linear-gradient(rgba(74,144,217,0.7),rgba(74,144,217,0.5)),url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&q=80');background-size:cover;background-position:center;will-change:transform;z-index:0}
+.hero-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;padding:0 1rem}
 .hero h1{font-size:2.5rem;font-weight:600;margin-bottom:1rem;text-shadow:2px 2px 4px rgba(0,0,0,0.3)}
 .hero p{font-size:1.1rem;margin-bottom:2rem;opacity:0.95}
 .search-box{display:flex;gap:10px;width:90%;max-width:500px}
@@ -24,7 +32,8 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background-color:#F8
 .quote-source{font-size:0.85rem;opacity:0.7;text-align:right;color:#fff}
 .quote-refresh{font-size:0.75rem;opacity:0.5;text-align:center;cursor:pointer;margin-top:8px;color:#fff;transition:opacity 0.3s}
 .daily-quote:hover .quote-refresh{opacity:0.8}
-.category-nav{background-color:white;padding:1rem 0;box-shadow:0 2px 5px rgba(0,0,0,0.05);position:sticky;top:0;z-index:100}
+.category-nav{background-color:white;padding:1rem 0;box-shadow:0 2px 5px rgba(0,0,0,0.05);position:sticky;top:0;z-index:100;transition:box-shadow 0.4s ease,background-color 0.4s ease}
+.category-nav.scrolled{box-shadow:0 4px 20px rgba(0,0,0,0.12);background-color:rgba(255,255,255,0.98)}
 .category-container{display:flex;gap:15px;overflow-x:auto;padding:0 20px;scrollbar-width:none}
 .category-container::-webkit-scrollbar{display:none}
 .category-tag{flex-shrink:0;padding:10px 24px;background-color:#F8FAFC;color:#6B7280;border-radius:20px;cursor:pointer;transition:all 0.3s;font-size:0.95rem;user-select:none}
@@ -36,7 +45,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background-color:#F8
 .recommendations{padding:1rem 1rem 2rem;max-width:1400px;margin:0 auto}
 .recommendations h2{font-size:1.5rem;margin-bottom:1.5rem;padding-left:10px;border-left:4px solid #4A90D9}
 .cards-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;justify-items:center}
-.card{width:300px;height:420px;background-color:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);position:relative;cursor:pointer;display:flex;flex-direction:column;opacity:0;transform:translateY(30px);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1),box-shadow 0.35s cubic-bezier(0.4,0,0.2,1);will-change:transform,opacity}
+.card{width:300px;height:420px;background-color:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);position:relative;cursor:pointer;display:flex;flex-direction:column;opacity:0;transform:translateY(30px);transition:opacity 0.5s ease,transform 0.5s cubic-bezier(0.4,0,0.2,1),box-shadow 0.35s cubic-bezier(0.4,0,0.2,1);will-change:transform,opacity}
 .card:hover{transform:translateY(-8px);box-shadow:0 12px 30px rgba(0,0,0,0.15)}
 .card-image{width:100%;height:200px;background-size:cover;background-position:center;flex-shrink:0;position:relative;transition:transform 0.4s cubic-bezier(0.4,0,0.2,1)}
 .card:hover .card-image{transform:scale(1.08)}
@@ -55,10 +64,10 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background-color:#F8
 .action-btn .like-count{font-size:0.8rem;color:#6B7280}
 .card-detail-btn{padding:6px 14px;background-color:#4A90D9;color:white;border:none;border-radius:8px;cursor:pointer;font-size:0.85rem;transition:background-color 0.3s cubic-bezier(0.4,0,0.2,1);white-space:nowrap}
 .card-detail-btn:hover{background-color:#3d80c7}
-.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.6);z-index:1000;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity 0.3s cubic-bezier(0.4,0,0.2,1),visibility 0s 0.3s}
-.modal-overlay.visible{opacity:1;visibility:visible;transition:opacity 0.3s cubic-bezier(0.4,0,0.2,1),visibility 0s 0s}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.6);z-index:1000;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity 0.35s cubic-bezier(0.4,0,0.2,1),visibility 0s 0.35s,backdrop-filter 0.35s ease}
+.modal-overlay.visible{opacity:1;visibility:visible;transition:opacity 0.35s cubic-bezier(0.4,0,0.2,1),visibility 0s 0s,backdrop-filter 0.35s ease}
 .modal-overlay.closing{opacity:0;visibility:visible;transition:opacity 0.25s ease-in,visibility 0s 0.25s}
-.modal-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);background-color:white;border-radius:12px;width:90%;max-width:600px;max-height:85vh;overflow-y:auto;z-index:1001;box-shadow:0 20px 60px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s cubic-bezier(0.4,0,0.2,1),transform 0.3s cubic-bezier(0.4,0,0.2,1)}
+.modal-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.85);background-color:white;border-radius:12px;width:90%;max-width:600px;max-height:85vh;overflow-y:auto;z-index:1001;box-shadow:0 20px 60px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.35s cubic-bezier(0.4,0,0.2,1),transform 0.4s cubic-bezier(0.34,1.56,0.64,1)}
 .modal-overlay.visible .modal-panel{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .modal-overlay.closing .modal-panel{opacity:0;transform:translate(-50%,-50%) scale(0.9);transition:opacity 0.25s ease-in,transform 0.25s ease-in}
 .modal-panel .modal-image{width:100%;height:300px;background-size:cover;background-position:center;border-radius:12px 12px 0 0}
@@ -99,6 +108,8 @@ footer p{font-size:0.9rem}
 </head>
 <body>
 <section class="hero">
+<div class="hero-bg"></div>
+<div class="hero-content">
 <h1>校园打卡指南</h1>
 <p>探索校园美景，记录青春足迹</p>
 <div class="search-box">
@@ -113,8 +124,9 @@ footer p{font-size:0.9rem}
 </div>
 <div class="quote-refresh" id="quoteRefresh">点击刷新</div>
 </div>
+</div>
 </section>
-<nav class="category-nav">
+<nav class="category-nav reveal">
 <div class="category-container" id="categoryContainer">
 <div class="category-tag active" data-category="all">全部</div>
 <div class="category-tag" data-category="学习">学习</div>
@@ -123,15 +135,15 @@ footer p{font-size:0.9rem}
 <div class="category-tag" data-category="运动">运动</div>
 </div>
 </nav>
-<div class="sort-bar" id="sortBar">
+<div class="sort-bar reveal reveal-delay-1" id="sortBar">
 <button class="sort-btn active" data-sort="likes">🔥 热度排序</button>
 <button class="sort-btn" data-sort="name">📋 名称排序</button>
 </div>
 <section class="recommendations">
-<h2>热门打卡点</h2>
+<h2 class="reveal">热门打卡点</h2>
 <div class="cards-container" id="cardsContainer"></div>
 </section>
-<footer><p>&copy; 2024 校园打卡指南 | 探索美好校园生活</p></footer>
+<footer class="reveal"><p>&copy; 2024 校园打卡指南 | 探索美好校园生活</p></footer>
 <div class="modal-overlay" id="modalOverlay">
 <div class="modal-panel" id="modalPanel">
 <button class="modal-close" id="modalClose">&times;</button>
@@ -169,7 +181,11 @@ function closeModal(){var a=document.getElementById('modalOverlay');a.classList.
 function handleLike(a){var b=loadLikesData(),c=loadFavoritesData();if(c.includes(a)){b[a]=b[a]?b[a]-1:cardsData.find(function(d){return d.id===a}).initialLikes-1}else{b[a]=b[a]?b[a]+1:cardsData.find(function(d){return d.id===a}).initialLikes+1}saveLikesData(b);var d=document.querySelectorAll('[data-id="'+a+'"]');d.forEach(function(e){var f=e.querySelector('.like-count');if(f)f.textContent=b[a]})}
 function handleFavorite(a){var b=loadFavoritesData();if(b.includes(a)){b=b.filter(function(c){return c!==a})}else{b.push(a)}saveFavoritesData(b);var c=document.querySelectorAll('[data-id="'+a+'"]');c.forEach(function(d){d.classList.toggle('favorited')});handleLike(a)}
 function fetchDailyQuote(){var a='https://api.quotable.io/quotes/random?limit=1&tags=inspirational';fetch(a).then(function(b){return b.json()}).then(function(b){var c=document.getElementById('quoteLoading'),d=document.getElementById('quoteContent'),e=document.getElementById('quoteText'),f=document.getElementById('quoteSource');c.style.display='none';d.style.display='block';e.textContent=b[0].content;f.textContent='— '+b[0].author}).catch(function(){document.getElementById('quoteLoading').style.display='none';document.getElementById('quoteContent').style.display='block';document.getElementById('quoteText').textContent='学习是照亮人生的灯塔';document.getElementById('quoteSource').textContent='— 校园打卡指南'})}
-document.addEventListener('DOMContentLoaded',function(){renderCards();fetchDailyQuote();document.getElementById('searchInput').addEventListener('input',function(a){currentSearch=a.target.value;renderCards()});document.getElementById('searchBtn').addEventListener('click',function(){renderCards()});document.getElementById('searchInput').addEventListener('keyup',function(a){a.key==='Enter'&&renderCards()});document.getElementById('categoryContainer').addEventListener('click',function(a){var b=a.target.closest('.category-tag');if(b){document.querySelectorAll('.category-tag').forEach(function(c){c.classList.remove('active')});b.classList.add('active');currentCategory=b.dataset.category;renderCards()}});document.getElementById('sortBar').addEventListener('click',function(a){var b=a.target.closest('.sort-btn');if(b){document.querySelectorAll('.sort-btn').forEach(function(c){c.classList.remove('active')});b.classList.add('active');currentSort=b.dataset.sort;renderCards()}});document.getElementById('cardsContainer').addEventListener('click',function(a){var b=a.target.closest('.card-detail-btn');if(b){var c=parseInt(b.dataset.id);openModal(c)}var d=a.target.closest('.like-btn');if(d){a.stopPropagation();var e=parseInt(d.dataset.id);handleLike(e);d.classList.toggle('liked')}var f=a.target.closest('.fav-btn');if(f){a.stopPropagation();var g=parseInt(f.dataset.id);handleFavorite(g)}});document.getElementById('modalClose').addEventListener('click',closeModal);document.getElementById('modalOverlay').addEventListener('click',function(a){a.target===document.getElementById('modalOverlay')&&closeModal()});document.getElementById('modalActions').addEventListener('click',function(a){var b=a.target.closest('.like-btn');if(b){var c=parseInt(b.dataset.id);handleLike(c);b.classList.toggle('liked')}var d=a.target.closest('.fav-btn');if(d){var e=parseInt(d.dataset.id);handleFavorite(e);d.classList.toggle('favorited')}});document.getElementById('dailyQuote').addEventListener('click',fetchDailyQuote);document.addEventListener('keyup',function(a){a.key==='Escape'&&document.getElementById('modalOverlay').classList.contains('visible')&&closeModal()})});
+document.addEventListener('DOMContentLoaded',function(){renderCards();fetchDailyQuote();document.getElementById('searchInput').addEventListener('input',function(a){currentSearch=a.target.value;renderCards()});document.getElementById('searchBtn').addEventListener('click',function(){renderCards()});document.getElementById('searchInput').addEventListener('keyup',function(a){a.key==='Enter'&&renderCards()});document.getElementById('categoryContainer').addEventListener('click',function(a){var b=a.target.closest('.category-tag');if(b){document.querySelectorAll('.category-tag').forEach(function(c){c.classList.remove('active')});b.classList.add('active');currentCategory=b.dataset.category;renderCards()}});document.getElementById('sortBar').addEventListener('click',function(a){var b=a.target.closest('.sort-btn');if(b){document.querySelectorAll('.sort-btn').forEach(function(c){c.classList.remove('active')});b.classList.add('active');currentSort=b.dataset.sort;renderCards()}});document.getElementById('cardsContainer').addEventListener('click',function(a){var b=a.target.closest('.card-detail-btn');if(b){var c=parseInt(b.dataset.id);openModal(c)}var d=a.target.closest('.like-btn');if(d){a.stopPropagation();var e=parseInt(d.dataset.id);handleLike(e);d.classList.toggle('liked')}var f=a.target.closest('.fav-btn');if(f){a.stopPropagation();var g=parseInt(f.dataset.id);handleFavorite(g)}});document.getElementById('modalClose').addEventListener('click',closeModal);document.getElementById('modalOverlay').addEventListener('click',function(a){a.target===document.getElementById('modalOverlay')&&closeModal()});document.getElementById('modalActions').addEventListener('click',function(a){var b=a.target.closest('.like-btn');if(b){var c=parseInt(b.dataset.id);handleLike(c);b.classList.toggle('liked')}var d=a.target.closest('.fav-btn');if(d){var e=parseInt(d.dataset.id);handleFavorite(e);d.classList.toggle('favorited')}});document.getElementById('dailyQuote').addEventListener('click',fetchDailyQuote);document.addEventListener('keyup',function(a){a.key==='Escape'&&document.getElementById('modalOverlay').classList.contains('visible')&&closeModal()})
+// --- 滚动动效 ---
+var scrollObserver=new IntersectionObserver(function(e){e.forEach(function(n){if(n.isIntersecting){n.target.classList.add('visible')}})},{threshold:0.15});document.querySelectorAll('.reveal').forEach(function(e){scrollObserver.observe(e)})
+var lastScroll=0;window.addEventListener('scroll',function(){var s=window.scrollY,nav=document.querySelector('.category-nav'),bg=document.querySelector('.hero-bg'),heroH=document.querySelector('.hero').offsetHeight;if(s>50){nav.classList.add('scrolled')}else{nav.classList.remove('scrolled')};if(bg&&s<=heroH){bg.style.transform='translateY('+(s*0.3)+'px)'}})
+});
 </script>
 </body>
 </html>
