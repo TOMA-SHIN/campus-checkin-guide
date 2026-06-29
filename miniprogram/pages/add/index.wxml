@@ -1,0 +1,48 @@
+<view class="container">
+  <view class="form-card">
+    <view class="form-item">
+      <text class="form-label">计划名称</text>
+      <input class="form-input" placeholder="请输入计划名称" value="{{planName}}" bindinput="onPlanNameInput" />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">所属科目</text>
+      <picker mode="selector" range="{{subjects}}" range-key="name" value="{{subjectIndex}}" bindchange="onSubjectChange">
+        <view class="picker {{subjectIndex > -1 ? 'active' : ''}}">
+          {{subjectIndex > -1 ? subjects[subjectIndex].name : '请选择科目'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">目标时长（分钟/次）</text>
+      <slider min="5" max="180" step="5" value="{{targetMinutes}}" show-value bindchange="onTargetMinutesChange" />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">开始日期</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+        <view class="picker active">{{startDate}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">结束日期</text>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+        <view class="picker active">{{endDate}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">计划颜色</text>
+      <view class="color-display" style="background-color: {{selectedColor}};" bindtap="showColorPicker"></view>
+    </view>
+  </view>
+
+  <view class="submit-btn" bindtap="submitPlan">创建计划</view>
+
+  <view class="color-picker-mask" wx:if="{{showColorPicker}}" bindtap="hideColorPicker"></view>
+  <view class="color-picker" wx:if="{{showColorPicker}}">
+    <view class="color-option" wx:for="{{colors}}" wx:key="*this" style="background-color: {{item}};" data-color="{{item}}" bindtap="selectColor"></view>
+  </view>
+</view>
